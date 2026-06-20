@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Tasto HOME -->
+    <item
+        android:id="@+id/homeFragment"
+        android:title="Home"
+        android:icon="@drawable/baseline_home_24"/>
+
+    <!-- Tasto CARRELLO -->
+    <item
+        android:id="@+id/cartFragment"
+        android:title="Carrello"
+        android:icon="@drawable/ic_cart"/>
+
+    <!-- Tasto PROFILO -->
+    <item
+        android:id="@+id/profileFragment"
+        android:title="Profilo"
+        android:icon="@drawable/ic_profile"/>
+</menu>

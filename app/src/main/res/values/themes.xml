@@ -1,0 +1,11 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. Usa NoActionBar -->
+    <style name="Base.Theme.SUperSpan" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Colori principali del tema -->
+        <item name="colorPrimary">@color/green_super</item>
+        <item name="colorSecondary">@color/orange_accent</item>
+        <item name="android:statusBarColor">@color/green_super</item>
+    </style>
+
+    <style name="Theme.SUperSpan" parent="Base.Theme.SUperSpan" />
+</resources>

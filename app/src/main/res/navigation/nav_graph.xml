@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <!-- Questi ID DEVONO essere identici a quelli del menu creato prima! -->
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.superspan.ui.customer.HomeFragment"
+        android:label="Home" />
+
+    <fragment
+        android:id="@+id/cartFragment"
+        android:name="com.example.superspan.ui.customer.CartFragment"
+        android:label="Carrello" />
+    <action
+        android:id="@+id/action_cartFragment_to_checkoutFragment"
+        app:destination="@id/checkoutFragment" />
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.superspan.ui.customer.ProfileFragment"
+        android:label="Profilo" />
+
+    <fragment
+        android:id="@+id/checkoutFragment"
+        android:name="com.example.superspan.ui.customer.CheckoutFragment"
+        android:label="Checkout" />
+
+    <fragment
+        android:id="@+id/productDetailFragment"
+        android:name="com.example.superspan.ui.customer.ProductDetailFragment"
+        android:label="Dettaglio Prodotto" />
+
+</navigation>
