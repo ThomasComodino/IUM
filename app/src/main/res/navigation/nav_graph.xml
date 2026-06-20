@@ -34,4 +34,9 @@
         android:name="com.example.superspan.ui.customer.ProductDetailFragment"
         android:label="Dettaglio Prodotto" />
 
+    <fragment
+        android:id="@+id/couponFragment"
+        android:name="com.example.superspan.ui.customer.CouponFragment"
+        android:label="I miei Coupon" />
+
 </navigation>

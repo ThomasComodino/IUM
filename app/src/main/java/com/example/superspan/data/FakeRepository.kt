@@ -31,4 +31,13 @@ object FakeRepository {
             currentPrice * it.quantity
         }
     }
+
+    var isPastaCouponActive: Boolean = false
+
+    // Dentro FakeRepository.kt
+    val applications = listOf(
+        JobApplication("Marco Rossi", "Scaffalista", "20/05/2024"),
+        JobApplication("Anna Bianchi", "Cassiera", "19/05/2024"),
+        JobApplication("Luca Verdi", "Magazziniere", "18/05/2024")
+    )
 }

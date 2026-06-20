@@ -32,6 +32,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         tools:listitem="@layout/item_cart" />
 
+    <TextView
+        android:id="@+id/tvEmptyCart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Il tuo carrello è vuoto.\nInizia a fare la spesa!"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textColor="@color/black_text"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <!-- Barra in basso con Totale e pulsante -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bottomBar"

@@ -24,3 +24,9 @@ data class Coupon(
     val requiredItemsCount: Int,
     var isActive: Boolean
 )
+
+data class JobApplication(
+    val candidateName: String,
+    val role: String,
+    val date: String
+)

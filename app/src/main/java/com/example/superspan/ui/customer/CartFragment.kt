@@ -54,6 +54,17 @@ class CartFragment : Fragment() {
     private fun updateTotal() {
         val total = FakeRepository.getTotal()
         binding.tvTotalPrice.text = "€ " + String.format("%.2f", total)
+
+        // CONTROLLO STATO VUOTO
+        if (FakeRepository.cart.isEmpty()) {
+            binding.rvCart.visibility = View.GONE
+            binding.bottomBar.visibility = View.GONE
+            binding.tvEmptyCart.visibility = View.VISIBLE
+        } else {
+            binding.rvCart.visibility = View.VISIBLE
+            binding.bottomBar.visibility = View.VISIBLE
+            binding.tvEmptyCart.visibility = View.GONE
+        }
     }
 
     override fun onDestroyView() {

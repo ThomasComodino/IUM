@@ -38,28 +38,28 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnMinus"
             style="@style/Widget.Material3.Button.OutlinedButton"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
             android:text="-"
             android:textSize="18sp"
             android:textColor="@color/black_text"
             android:insetTop="0dp"
             android:insetBottom="0dp"
             android:padding="0dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="12dp"
             app:layout_constraintTop_toBottomOf="@id/tvCartPrice"
             app:layout_constraintStart_toStartOf="parent"/>
 
-        <!-- Quantità -->
+        <!-- Quantità (Larghezza fissa per creare lo spazio centrale) -->
         <TextView
             android:id="@+id/tvQuantity"
-            android:layout_width="wrap_content"
+            android:layout_width="60dp"
             android:layout_height="wrap_content"
             android:text="1"
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="@color/black_text"
-            android:layout_marginHorizontal="16dp"
+            android:gravity="center"
             app:layout_constraintTop_toTopOf="@id/btnMinus"
             app:layout_constraintBottom_toBottomOf="@id/btnMinus"
             app:layout_constraintStart_toEndOf="@id/btnMinus"/>
@@ -68,8 +68,8 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnPlus"
             style="@style/Widget.Material3.Button.OutlinedButton"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
             android:text="+"
             android:textSize="18sp"
             android:textColor="@color/black_text"

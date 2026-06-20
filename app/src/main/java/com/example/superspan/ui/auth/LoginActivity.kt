@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.superspan.MainActivity
+import com.example.superspan.AdminActivity // Creeremo questa ora
 import com.example.superspan.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {
@@ -15,10 +16,10 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // --- LOGICA RICORDAMI ---
+        // 1. RIPRISTINO DATI SALVATI (Ricordami)
         val pref = getSharedPreferences("SUperSpanPrefs", MODE_PRIVATE)
         val savedEmail = pref.getString("email", "")
-        val savedPass = pref.getString("pass", "") // Aggiungiamo anche la password
+        val savedPass = pref.getString("pass", "")
 
         if (!savedEmail.isNullOrBlank()) {
             binding.tilEmail.editText?.setText(savedEmail)
@@ -26,37 +27,40 @@ class LoginActivity : AppCompatActivity() {
             binding.cbRemember.isChecked = true
         }
 
-        // --- BOTTONE ACCEDI (Con Validazione) ---
         binding.btnLogin.setOnClickListener {
             val email = binding.tilEmail.editText?.text.toString()
             val pass = binding.tilPassword.editText?.text.toString()
 
-            // Controllo se i campi sono vuoti
+            // 2. CONTROLLO CAMPI VUOTI (Tua richiesta di sicurezza)
             if (email.isBlank() || pass.isBlank()) {
-                if (email.isBlank()) binding.tilEmail.error = "Inserisci l'email" else binding.tilEmail.error = null
-                if (pass.isBlank()) binding.tilPassword.error = "Inserisci la password" else binding.tilPassword.error = null
-                Toast.makeText(this, "Campi obbligatori mancanti!", Toast.LENGTH_SHORT).show()
+                if (email.isBlank()) binding.tilEmail.error = "Campo obbligatorio" else binding.tilEmail.error = null
+                if (pass.isBlank()) binding.tilPassword.error = "Campo obbligatorio" else binding.tilPassword.error = null
+                Toast.makeText(this, "Riempi tutti i campi!", Toast.LENGTH_SHORT).show()
             } else {
-                // Se tutto è pieno, salviamo (se checked) o cancelliamo (se unchecked)
+                // Se i campi sono pieni, procediamo con la logica di salvataggio
                 val editor = pref.edit()
                 if (binding.cbRemember.isChecked) {
                     editor.putString("email", email)
                     editor.putString("pass", pass)
                 } else {
-                    editor.clear() // Cancella tutto se togli la spunta
+                    editor.clear()
                 }
                 editor.apply()
 
-                // Navigazione
-                startActivity(Intent(this, MainActivity::class.java))
+                // 3. SEPARAZIONE RUOLI (Admin vs Cliente)
+                if (email == "admin" && pass == "admin") {
+                    Toast.makeText(this, "Accesso Amministratore", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this, AdminActivity::class.java))
+                } else {
+                    Toast.makeText(this, "Benvenuto in SUperSpan", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this, MainActivity::class.java))
+                }
                 finish()
             }
         }
 
-        // --- LINK REGISTRATI (Ripristinato) ---
         binding.tvRegister.setOnClickListener {
-            val intent = Intent(this, RegisterActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, RegisterActivity::class.java))
         }
     }
 }

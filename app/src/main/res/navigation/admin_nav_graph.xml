@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/admin_nav_graph"
+    app:startDestination="@id/adminDashboardFragment">
+
+    <!-- Schermata Dashboard -->
+    <fragment
+        android:id="@+id/adminDashboardFragment"
+        android:name="com.example.superspan.ui.admin.AdminDashboardFragment"
+        android:label="Dashboard Admin" />
+
+    <!-- Schermata Candidature Lavoro -->
+    <fragment
+        android:id="@+id/adminJobsFragment"
+        android:name="com.example.superspan.ui.admin.AdminJobsFragment"
+        android:label="Candidature Lavoro" />
+
+    <fragment
+        android:id="@+id/adminJobDetailFragment"
+        android:name="com.example.superspan.ui.admin.AdminJobDetailFragment"
+        android:label="Dettaglio Candidato" />
+
+</navigation>
