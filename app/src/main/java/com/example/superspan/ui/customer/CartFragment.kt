@@ -31,9 +31,13 @@ class CartFragment : Fragment() {
         binding.rvCart.layoutManager = LinearLayoutManager(requireContext())
 
         // Passiamo i dati dal finto DB. La funzione "onQuantityChange" aggiorna il testo del totale!
-        adapter = CartAdapter(FakeRepository.cart) {
-            updateTotal()
-        }
+        adapter = CartAdapter(FakeRepository.cart,
+            onQuantityChange = { updateTotal() },
+            onItemClick = { productId ->
+                val bundle = Bundle().apply { putInt("productId", productId) }
+                findNavController().navigate(R.id.productDetailFragment, bundle)
+            }
+        )
         binding.rvCart.adapter = adapter
 
         // Aggiorniamo il totale appena si apre la pagina

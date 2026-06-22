@@ -6,9 +6,9 @@ data class Product(
     val name: String,
     val category: String,
     val description: String,
-    val price: Double,
-    val discountPrice: Double? = null, // Se c'è lo sconto, altrimenti è null
-    val imageUrl: Int = android.R.drawable.ic_menu_gallery // Immagine finta di default
+    val price: Double, // Prezzo di listino sempre fisso
+    var isFavorite: Boolean = false,
+    val imageUrl: Int = android.R.drawable.ic_menu_gallery
 )
 
 // Modello per il prodotto dentro il carrello (con la quantità)
@@ -30,3 +30,4 @@ data class JobApplication(
     val role: String,
     val date: String
 )
+

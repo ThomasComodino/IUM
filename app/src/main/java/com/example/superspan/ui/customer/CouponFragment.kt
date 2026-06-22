@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.example.superspan.R
 import com.example.superspan.data.FakeRepository
 import com.example.superspan.databinding.FragmentCouponBinding
 
@@ -21,25 +22,38 @@ class CouponFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 1. ALL'APERTURA: Controlla se il coupon era già stato attivato
-        if (FakeRepository.isPastaCouponActive) {
-            setCouponAsActivated()
-        }
+        // --- CONTROLLO DANIELA (ADMIN) ---
+        // Se Daniela ha deciso di non pubblicare il coupon, lo nascondiamo a Michele
+        if (!FakeRepository.isCouponPublishedByAdmin) {
+            binding.layoutCoupon.root.visibility = View.GONE
+            binding.tvNoCoupons.visibility = View.VISIBLE // Assicurati di avere questo ID nell'XML
+        } else {
+            binding.layoutCoupon.root.visibility = View.VISIBLE
+            binding.tvNoCoupons.visibility = View.GONE
 
-        // 2. AL CLICK: Salva lo stato nel Repository e aggiorna la grafica
-        binding.layoutCoupon.btnActivate.setOnClickListener {
-            FakeRepository.isPastaCouponActive = true // Salvataggio "eterno" (finché l'app è aperta)
-            setCouponAsActivated()
-            Toast.makeText(requireContext(), "Coupon Michele Attivato!", Toast.LENGTH_SHORT).show()
+            // 1. ALL'APERTURA: Controlla se Michele lo aveva già attivato
+            if (FakeRepository.isPastaCouponActive) {
+                setCouponAsActivated()
+            }
+
+            // 2. AL CLICK: Michele attiva lo sconto per se stesso
+            binding.layoutCoupon.btnActivate.setOnClickListener {
+                FakeRepository.isPastaCouponActive = true
+                setCouponAsActivated()
+                Toast.makeText(requireContext(), "Coupon attivato! Sconto pronto.", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
-    // Funzione di comodo per cambiare la grafica
     private fun setCouponAsActivated() {
         binding.layoutCoupon.btnActivate.text = "ATTIVATO"
         binding.layoutCoupon.btnActivate.isEnabled = false
         binding.layoutCoupon.chipStatus.text = "ATTIVO"
-        // Opzionale: cambiamo colore al chip per farlo risaltare
         binding.layoutCoupon.chipStatus.setChipBackgroundColorResource(android.R.color.darker_gray)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

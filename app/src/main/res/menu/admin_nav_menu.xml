@@ -8,4 +8,8 @@
         android:id="@+id/adminJobsFragment"
         android:title="Lavoro"
         android:icon="@android:drawable/ic_menu_view"/>
+    <item
+        android:id="@+id/adminCouponsFragment"
+        android:title="Coupon"
+        android:icon="@android:drawable/ic_menu_agenda"/>
 </menu>

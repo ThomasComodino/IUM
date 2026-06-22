@@ -41,7 +41,7 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Card Coupon con Chip e Button -->
+        <!-- Card Coupon -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -59,21 +59,6 @@
                     android:text="89" android:textSize="36sp" android:textStyle="bold" android:textColor="@color/orange_accent"/>
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                     android:text="Promozione Pasta attiva" android:textSize="12sp"/>
-
-                <!-- Chip e Button richiesti dal Fragment -->
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_status"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:text="NON ATTIVO"/>
-
-                <Button
-                    android:id="@+id/btn_activate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="ATTIVA"/>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 

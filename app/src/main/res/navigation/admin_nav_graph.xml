@@ -21,4 +21,9 @@
         android:name="com.example.superspan.ui.admin.AdminJobDetailFragment"
         android:label="Dettaglio Candidato" />
 
+    <fragment
+        android:id="@+id/adminCouponsFragment"
+        android:name="com.example.superspan.ui.admin.AdminCouponsFragment"
+        android:label="Gestione Coupon" />
+
 </navigation>

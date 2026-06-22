@@ -4,11 +4,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.superspan.data.CartItem
+import com.example.superspan.data.FakeRepository
 import com.example.superspan.databinding.ItemCartBinding
 
 class CartAdapter(
     private var cartItems: List<CartItem>,
-    private val onQuantityChange: () -> Unit // Questo avviserà la pagina di ricalcolare il totale
+    private val onQuantityChange: () -> Unit,
+    private val onItemClick: (Int) -> Unit
 ) : RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
 
     inner class CartViewHolder(val binding: ItemCartBinding) : RecyclerView.ViewHolder(binding.root)
@@ -23,15 +25,17 @@ class CartAdapter(
         with(holder.binding) {
             tvCartName.text = item.product.name
 
-            val price = item.product.discountPrice ?: item.product.price
-            tvCartPrice.text = "€ " + String.format("%.2f", price)
+            // --- CAMBIAMENTO QUI: Usa getFinalPrice invece di discountPrice ---
+            val currentPrice = FakeRepository.getFinalPrice(item.product)
+            tvCartPrice.text = "€ " + String.format("%.2f", currentPrice)
+
             tvQuantity.text = item.quantity.toString()
 
             // Click su Più
             btnPlus.setOnClickListener {
                 item.quantity++
                 notifyItemChanged(position)
-                onQuantityChange() // Aggiorna il totale
+                onQuantityChange()
             }
 
             // Click su Meno
@@ -43,11 +47,11 @@ class CartAdapter(
                 }
             }
 
-            // Click su Cestino
+            // Click su Cestino (con dialogo di conferma come chiesto)
             btnDelete.setOnClickListener {
                 com.google.android.material.dialog.MaterialAlertDialogBuilder(holder.itemView.context)
                     .setTitle("Rimuovere prodotto?")
-                    .setMessage("Sei sicuro di voler togliere questo articolo dal carrello?")
+                    .setMessage("Sei sicuro di voler togliere questo articolo?")
                     .setNegativeButton("Annulla", null)
                     .setPositiveButton("Rimuovi") { _, _ ->
                         (cartItems as MutableList).removeAt(position)
@@ -55,6 +59,11 @@ class CartAdapter(
                         onQuantityChange()
                     }
                     .show()
+            }
+
+            // Navigazione al dettaglio al click sulla riga
+            root.setOnClickListener {
+                onItemClick(item.product.id)
             }
         }
     }
