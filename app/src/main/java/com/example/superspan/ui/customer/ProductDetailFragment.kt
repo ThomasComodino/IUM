@@ -59,10 +59,20 @@ class ProductDetailFragment : Fragment() {
             }
 
             // Gestione Preferiti (Michele)
+            // Dentro onViewCreated in ProductDetailFragment.kt
             binding.btnFavorite.setOnClickListener {
-                p.isFavorite = !p.isFavorite
-                val msg = if (p.isFavorite) "Aggiunto ai preferiti" else "Rimosso dai preferiti"
-                Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
+                // 1. Aggiungiamo o rimuoviamo dal cassetto reale
+                FakeRepository.toggleFavorite(p)
+
+                // 2. Feedback visivo per l'utente
+                val isNowFavorite = FakeRepository.favorites.any { it.product.id == p.id }
+                if (isNowFavorite) {
+                    binding.btnFavorite.text = "RIMUOVI DAI PREFERITI"
+                    Toast.makeText(requireContext(), "Aggiunto ai preferiti!", Toast.LENGTH_SHORT).show()
+                } else {
+                    binding.btnFavorite.text = "AGGIUNGI AI PREFERITI"
+                    Toast.makeText(requireContext(), "Rimosso dai preferiti", Toast.LENGTH_SHORT).show()
+                }
             }
 
             // Bottone aggiungi al carrello

@@ -31,3 +31,8 @@ data class JobApplication(
     val date: String
 )
 
+data class FavoriteItem(
+    val product: Product,
+    val savedPrice: Double
+)
+

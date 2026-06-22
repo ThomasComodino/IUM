@@ -43,4 +43,16 @@ object FakeRepository {
         JobApplication("Anna Bianchi", "Cassiera", "19/05/2024"),
         JobApplication("Luca Verdi", "Magazziniere", "18/05/2024")
     )
+
+    val favorites = mutableListOf<FavoriteItem>()
+
+    fun toggleFavorite(product: Product) {
+        val existing = favorites.find { it.product.id == product.id }
+        if (existing != null) {
+            favorites.remove(existing)
+        } else {
+            // Salviamo il prodotto insieme al prezzo "congelato" in questo momento
+            favorites.add(FavoriteItem(product, getFinalPrice(product)))
+        }
+    }
 }
