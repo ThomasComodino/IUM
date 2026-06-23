@@ -55,4 +55,10 @@ object FakeRepository {
             favorites.add(FavoriteItem(product, getFinalPrice(product)))
         }
     }
+
+    val giftCoupon = GiftCoupon(
+        id = 101,
+        title = "Regalo di Benvenuto",
+        options = listOf(products[1], products[2], products[3]) // Biscotti, Pasta, Passata
+    )
 }

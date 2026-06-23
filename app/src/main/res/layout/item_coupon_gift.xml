@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="12dp"
+    app:cardCornerRadius="16dp"
+    app:strokeColor="@color/orange_accent"
+    app:strokeWidth="2dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="COUPON REGALO"
+            android:textColor="@color/orange_accent"
+            android:textStyle="bold"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/tvGiftTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Scegli un prodotto GRATIS"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="4dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Valido solo per ritiro in negozio."
+            android:textSize="12sp"
+            android:textColor="#888888"
+            android:layout_marginBottom="12dp"/>
+
+        <!-- RadioGroup per la scelta dei 3 prodotti -->
+        <RadioGroup
+            android:id="@+id/rgOptions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <RadioButton android:id="@+id/rbOpt1" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Opzione 1"/>
+            <RadioButton android:id="@+id/rbOpt2" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Opzione 2"/>
+            <RadioButton android:id="@+id/rbOpt3" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Opzione 3"/>
+        </RadioGroup>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnActivateGift"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:text="SCEGLI UN PRODOTTO"
+            android:enabled="false"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="@color/orange_accent"/>
+
+        <TextView
+            android:id="@+id/tvBarcode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CODICE: SP-998-GIFT"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:layout_marginTop="12dp"
+            android:visibility="gone"/>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

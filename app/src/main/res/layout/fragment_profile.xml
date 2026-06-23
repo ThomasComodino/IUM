@@ -1,92 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_gray">
+    android:background="@color/bg_gray"
+    android:padding="24dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/tvProfileTitle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="24dp">
+        android:text="Il tuo Profilo"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        android:textColor="@color/green_super"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Il tuo Profilo"
-            android:textSize="26sp"
-            android:textStyle="bold"
-            android:textColor="@color/green_super"/>
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardFidelity"
+        android:layout_width="0dp"
+        android:layout_height="140dp"
+        android:layout_marginTop="16dp"
+        app:cardCornerRadius="16dp"
+        app:cardBackgroundColor="@color/green_super"
+        app:layout_constraintTop_toBottomOf="@id/tvProfileTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Carta Fedeltà -->
-        <com.google.android.material.card.MaterialCardView
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="180dp"
-            android:layout_marginTop="24dp"
-            app:cardCornerRadius="16dp"
-            app:cardBackgroundColor="@color/green_super">
+            android:layout_height="match_parent"
+            android:padding="20dp">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="20dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Carta SUperSpan"
+                android:textColor="@color/white"
+                android:textStyle="bold"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Carta SUperSpan"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"/>
+            <TextView
+                android:id="@+id/tvPoints"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1.250 Punti"
+                android:textColor="@color/white"
+                android:textSize="32sp"
+                android:layout_centerInParent="true"/>
 
-                <TextView
-                    android:id="@+id/tvPoints"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0 Punti"
-                    android:textColor="@color/white"
-                    android:textSize="32sp"
-                    android:layout_centerInParent="true"/>
+        </RelativeLayout>
+    </com.google.android.material.card.MaterialCardView>
 
-            </RelativeLayout>
+    <TextView
+        android:id="@+id/tvFavLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="I tuoi Preferiti"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@id/cardFidelity"
+        app:layout_constraintStart_toStartOf="parent"/>
 
-        </com.google.android.material.card.MaterialCardView>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvFavorites"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintTop_toBottomOf="@id/tvFavLabel"
+        app:layout_constraintBottom_toTopOf="@id/btnLogout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="I tuoi Preferiti"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_marginTop="32dp"
-            android:textColor="@color/black_text"/>
+    <TextView
+        android:id="@+id/tvNoFavorites"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nessun preferito salvato"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="@id/rvFavorites"
+        app:layout_constraintBottom_toBottomOf="@id/rvFavorites"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-        <TextView
-            android:id="@+id/tvNoFavorites"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Non hai ancora salvato preferiti."
-            android:layout_marginTop="16dp"
-            android:textAlignment="center"
-            android:visibility="gone"/>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnLogout"
+        style="@style/Widget.Material3.Button.TextButton"
+        android:layout_width="0dp"
+        android:layout_height="55dp"
+        android:text="ESCI DALL'ACCOUNT"
+        android:textColor="@color/red_error"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvFavorites"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:nestedScrollingEnabled="false"/>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnLogout"
-            style="@style/Widget.Material3.Button.TextButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="ESCI DALL'ACCOUNT"
-            android:textColor="@color/red_error"
-            android:layout_marginTop="40dp"
-            android:layout_marginBottom="24dp"/>
-
-    </LinearLayout>
-
-</androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

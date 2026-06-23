@@ -27,8 +27,7 @@
         android:visibility="gone" />
 
     <!-- La card del coupon -->
-    <include
-        android:id="@+id/layoutCoupon"
-        layout="@layout/item_coupon" />
+    <include android:id="@+id/layoutCoupon" layout="@layout/item_coupon" />
+    <include android:id="@+id/layoutGift" layout="@layout/item_coupon_gift" />
 
 </LinearLayout>

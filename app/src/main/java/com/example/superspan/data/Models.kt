@@ -36,3 +36,11 @@ data class FavoriteItem(
     val savedPrice: Double
 )
 
+data class GiftCoupon(
+    val id: Int,
+    val title: String,
+    val options: List<Product>, // I 3 prodotti tra cui scegliere
+    var selectedProductId: Int? = null, // Quello scelto da Michele
+    var isActivated: Boolean = false
+)
+

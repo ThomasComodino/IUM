@@ -59,18 +59,18 @@ class ProductDetailFragment : Fragment() {
             }
 
             // Gestione Preferiti (Michele)
-            // Dentro onViewCreated in ProductDetailFragment.kt
-            binding.btnFavorite.setOnClickListener {
-                // 1. Aggiungiamo o rimuoviamo dal cassetto reale
-                FakeRepository.toggleFavorite(p)
+            // Verifichiamo se il prodotto è già tra i preferiti all'apertura della pagina
+            updateFavoriteButtonText(p)
 
-                // 2. Feedback visivo per l'utente
+            binding.btnFavorite.setOnClickListener {
+                FakeRepository.toggleFavorite(p)
+                updateFavoriteButtonText(p) // Aggiorna il testo dopo il click
+                
+                // Feedback visivo (opzionale, mantenuto per coerenza)
                 val isNowFavorite = FakeRepository.favorites.any { it.product.id == p.id }
                 if (isNowFavorite) {
-                    binding.btnFavorite.text = "RIMUOVI DAI PREFERITI"
                     Toast.makeText(requireContext(), "Aggiunto ai preferiti!", Toast.LENGTH_SHORT).show()
                 } else {
-                    binding.btnFavorite.text = "AGGIUNGI AI PREFERITI"
                     Toast.makeText(requireContext(), "Rimosso dai preferiti", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -85,6 +85,16 @@ class ProductDetailFragment : Fragment() {
             binding.btnBack.setOnClickListener {
                 findNavController().popBackStack()
             }
+        }
+    }
+
+    // Funzione di supporto per non ripetere codice
+    private fun updateFavoriteButtonText(p: com.example.superspan.data.Product) {
+        val isFavorite = FakeRepository.favorites.any { it.product.id == p.id }
+        if (isFavorite) {
+            binding.btnFavorite.text = "RIMUOVI DAI PREFERITI"
+        } else {
+            binding.btnFavorite.text = "AGGIUNGI AI PREFERITI"
         }
     }
 

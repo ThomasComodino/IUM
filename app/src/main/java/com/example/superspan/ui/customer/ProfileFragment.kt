@@ -7,23 +7,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.superspan.R
 import com.example.superspan.adapters.FavoriteAdapter
 import com.example.superspan.data.FakeRepository
 import com.example.superspan.databinding.FragmentProfileBinding
-import androidx.navigation.fragment.findNavController
-import com.example.superspan.R
 
 class ProfileFragment : Fragment() {
 
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -31,51 +27,29 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 1. VISUALIZZAZIONE PUNTI CARTA FEDELTÀ (Per Michele)
-        // Simuliamo un punteggio accumulato
+        // Carichiamo i punti
         binding.tvPoints.text = "1.250 Punti"
 
-        // 2. CONFIGURAZIONE LISTA PREFERITI (Con confronto prezzi)
-        setupFavoritesList()
-
-        // 3. LOGICA LOGOUT (Con Dialogo di conferma)
-        binding.btnLogout.setOnClickListener {
-            com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Logout")
-                .setMessage("Sei sicuro di voler uscire dal tuo profilo?")
-                .setNegativeButton("Annulla", null)
-                .setPositiveButton("Esci") { _, _ ->
-                    Toast.makeText(requireContext(), "Sessione terminata", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(requireContext(), com.example.superspan.ui.auth.LoginActivity::class.java)
-                    // Pulisce lo stack per evitare di tornare indietro nell'area personale
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    startActivity(intent)
-                }
-                .show()
-        }
-    }
-
-    private fun setupFavoritesList() {
+        // Setup della lista
         val favoritesList = FakeRepository.favorites
-
         if (favoritesList.isEmpty()) {
             binding.rvFavorites.visibility = View.GONE
             binding.tvNoFavorites.visibility = View.VISIBLE
         } else {
             binding.rvFavorites.visibility = View.VISIBLE
             binding.tvNoFavorites.visibility = View.GONE
-
             binding.rvFavorites.layoutManager = LinearLayoutManager(requireContext())
-
-            // Cambiamo la logica: l'adapter ci passa il PRODUCT ID
             binding.rvFavorites.adapter = FavoriteAdapter(favoritesList) { productId ->
-                // Creiamo il bundle con l'ID per aprire il dettaglio
-                val bundle = Bundle().apply {
-                    putInt("productId", productId)
-                }
-                // Navighiamo verso la scheda prodotto
+                val bundle = Bundle().apply { putInt("productId", productId) }
                 findNavController().navigate(R.id.productDetailFragment, bundle)
             }
+        }
+
+        // Logout
+        binding.btnLogout.setOnClickListener {
+            val intent = Intent(requireContext(), com.example.superspan.ui.auth.LoginActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
         }
     }
 
