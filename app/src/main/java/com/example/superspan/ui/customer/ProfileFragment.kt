@@ -1,5 +1,6 @@
 package com.example.superspan.ui.customer
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -45,11 +46,24 @@ class ProfileFragment : Fragment() {
             }
         }
 
+        // Nuovi listener per le card di Claudia
+        binding.cardOrders.setOnClickListener {
+            findNavController().navigate(R.id.ordersFragment)
+        }
+        binding.cardAddresses.setOnClickListener {
+            findNavController().navigate(R.id.addressesFragment)
+        }
+
         // Logout
         binding.btnLogout.setOnClickListener {
+            // Pulizia SharedPreferences per disconnessione reale
+            val pref = requireContext().getSharedPreferences("SUperSpanPrefs", Context.MODE_PRIVATE)
+            pref.edit().clear().apply()
+
             val intent = Intent(requireContext(), com.example.superspan.ui.auth.LoginActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
+            requireActivity().finish()
         }
     }
 

@@ -44,3 +44,18 @@ data class GiftCoupon(
     var isActivated: Boolean = false
 )
 
+// Modelli per Claudia
+data class Order(
+    val id: String,
+    val date: String,
+    val total: Double,
+    val status: String,
+    val items: List<CartItem>
+)
+
+data class Address(
+    val id: Int,
+    val name: String, // Esempio: "Casa", "Ufficio"
+    val fullAddress: String
+)
+

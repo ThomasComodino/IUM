@@ -61,4 +61,15 @@ object FakeRepository {
         title = "Regalo di Benvenuto",
         options = listOf(products[1], products[2], products[3]) // Biscotti, Pasta, Passata
     )
+
+    // Dati per Claudia (Profilo)
+    val orders = mutableListOf(
+        Order("ORD-2024-001", "15/05/2024", 12.50, "Consegnato", listOf(CartItem(products[0], 2), CartItem(products[2], 1))),
+        Order("ORD-2024-002", "18/05/2024", 8.40, "In consegna", listOf(CartItem(products[1], 1), CartItem(products[3], 2)))
+    )
+
+    val addresses = mutableListOf(
+        Address(1, "Casa", "Via Roma 10, Milano"),
+        Address(2, "Ufficio", "Corso Buenos Aires 45, Milano")
+    )
 }

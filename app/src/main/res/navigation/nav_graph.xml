@@ -39,4 +39,14 @@
         android:name="com.example.superspan.ui.customer.CouponFragment"
         android:label="I miei Coupon" />
 
+    <fragment
+        android:id="@+id/ordersFragment"
+        android:name="com.example.superspan.ui.customer.OrdersFragment"
+        android:label="I miei Ordini" />
+
+    <fragment
+        android:id="@+id/addressesFragment"
+        android:name="com.example.superspan.ui.customer.AddressesFragment"
+        android:label="Indirizzi Salvati" />
+
 </navigation>
