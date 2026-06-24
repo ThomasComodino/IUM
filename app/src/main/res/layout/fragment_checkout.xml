@@ -22,9 +22,12 @@
         style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Via e Civico">
+        android:hint="Via e Civico"
+        app:endIconMode="custom"
+        app:endIconDrawable="@android:drawable/ic_menu_search">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPostalAddress"/>
@@ -39,20 +42,17 @@
         android:textStyle="bold"
         android:textColor="@color/black_text"/>
 
-    <!-- La nostra mappa finta per rassicurare Claudia -->
+    <!-- Mappa Interattiva per Claudia -->
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="250dp"
         app:cardCornerRadius="16dp"
         app:cardElevation="4dp">
 
-        <ImageView
+        <WebView
+            android:id="@+id/webViewMap"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:src="@android:drawable/ic_dialog_map"
-            android:tint="@color/green_super"
-            android:background="#E0E0E0"/> <!-- Sfondo grigino tipo mappa -->
+            android:layout_height="match_parent" />
 
     </com.google.android.material.card.MaterialCardView>
 
