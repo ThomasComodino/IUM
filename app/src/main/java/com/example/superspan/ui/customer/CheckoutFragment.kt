@@ -78,6 +78,7 @@ class CheckoutFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupMap()
+        setupSavedAddresses()
 
         binding.tilAddress.setEndIconOnClickListener {
             val address = binding.etAddress.text.toString()
@@ -93,6 +94,25 @@ class CheckoutFragment : Fragment() {
             } else {
                 binding.tilAddress.error = null
                 showConfirmationDialog(address)
+            }
+        }
+    }
+
+    private fun setupSavedAddresses() {
+        val addresses = FakeRepository.addresses
+        if (addresses.isEmpty()) {
+            binding.cgSavedAddresses.visibility = View.GONE
+        } else {
+            binding.cgSavedAddresses.visibility = View.VISIBLE
+            binding.cgSavedAddresses.removeAllViews()
+            addresses.forEach { addr ->
+                val chip = com.google.android.material.chip.Chip(requireContext())
+                chip.text = addr.name
+                chip.setOnClickListener {
+                    binding.etAddress.setText(addr.fullAddress)
+                    binding.webViewMap.evaluateJavascript("updateMap('${addr.fullAddress}')", null)
+                }
+                binding.cgSavedAddresses.addView(chip)
             }
         }
     }
@@ -120,6 +140,10 @@ class CheckoutFragment : Fragment() {
             .setMessage("L'ordine verrà inviato a: $address. Vuoi procedere con il pagamento?")
             .setNegativeButton("Modifica", null)
             .setPositiveButton("Paga ora") { _, _ ->
+                // Salviamo l'ordine e l'indirizzo nel repository reale
+                val total = FakeRepository.getTotal()
+                FakeRepository.addOrder(FakeRepository.cart, total, address)
+
                 FakeRepository.cart.clear()
                 Toast.makeText(requireContext(), "Pagamento riuscito!", Toast.LENGTH_LONG).show()
                 findNavController().navigate(R.id.homeFragment)

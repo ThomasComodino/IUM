@@ -62,14 +62,21 @@ object FakeRepository {
         options = listOf(products[1], products[2], products[3]) // Biscotti, Pasta, Passata
     )
 
-    // Dati per Claudia (Profilo)
-    val orders = mutableListOf(
-        Order("ORD-2024-001", "15/05/2024", 12.50, "Consegnato", listOf(CartItem(products[0], 2), CartItem(products[2], 1))),
-        Order("ORD-2024-002", "18/05/2024", 8.40, "In consegna", listOf(CartItem(products[1], 1), CartItem(products[3], 2)))
-    )
+    // Dati per Claudia (Profilo) - Inizialmente vuoti o con semi realistici
+    val orders = mutableListOf<Order>()
+    val addresses = mutableListOf<Address>()
 
-    val addresses = mutableListOf(
-        Address(1, "Casa", "Via Roma 10, Milano"),
-        Address(2, "Ufficio", "Corso Buenos Aires 45, Milano")
-    )
+    fun addOrder(items: List<CartItem>, total: Double, address: String) {
+        val dateFormat = java.text.SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault())
+        val date = dateFormat.format(java.util.Date())
+        val orderId = "ORD-${System.currentTimeMillis().toString().takeLast(6)}"
+        
+        orders.add(0, Order(orderId, date, total, "In elaborazione", items.toList()))
+        
+        // Aggiungiamo l'indirizzo se non esiste già
+        if (addresses.none { it.fullAddress.equals(address, ignoreCase = true) }) {
+            val newId = (addresses.maxOfOrNull { it.id } ?: 0) + 1
+            addresses.add(Address(newId, "Indirizzo $newId", address))
+        }
+    }
 }
