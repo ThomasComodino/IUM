@@ -56,9 +56,20 @@ class ProfileFragment : Fragment() {
 
         // Logout
         binding.btnLogout.setOnClickListener {
-            // Pulizia SharedPreferences per disconnessione reale
+            // Pulizia selettiva delle SharedPreferences
             val pref = requireContext().getSharedPreferences("SUperSpanPrefs", Context.MODE_PRIVATE)
-            pref.edit().clear().apply()
+            val savedEmail = pref.getString("email", "")
+            val savedPass = pref.getString("pass", "")
+
+            val editor = pref.edit()
+            editor.clear() // Puliamo tutto per sicurezza...
+            
+            // ...ma se c'erano dati salvati con "Ricordami", li ripristiniamo subito
+            if (!savedEmail.isNullOrBlank()) {
+                editor.putString("email", savedEmail)
+                editor.putString("pass", savedPass)
+            }
+            editor.apply()
 
             val intent = Intent(requireContext(), com.example.superspan.ui.auth.LoginActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

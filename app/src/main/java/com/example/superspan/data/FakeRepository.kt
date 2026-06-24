@@ -6,16 +6,25 @@ object FakeRepository {
         Product(1, "Acqua Naturale 6x1.5L", "Bevande", "Cassa d'acqua naturale.", 2.50),
         Product(2, "Biscotti Frollini 500g", "Dolci", "Ottimi per la colazione.", 3.20),
         Product(3, "Pasta Spaghetti 500g", "Alimentari", "Grano duro 100% italiano.", 1.20),
-        Product(4, "Passata di Pomodoro", "Alimentari", "Pomodori italiani.", 1.50)
+        Product(4, "Passata di Pomodoro", "Alimentari", "Pomodori italiani.", 1.50),
+        Product(5, "Set 3 Padelle Antiaderenti", "Casalinghi", "Padelle di alta qualità per la tua cucina.", 29.90)
     )
 
     // Funzione per il prezzo dinamico (Richiesta per l'aggiornamento automatico)
     fun getFinalPrice(product: Product): Double {
-        return if (isPastaCouponActive && product.category == "Alimentari") {
-            product.price * 0.85 // Ora 'price' sarà riconosciuto!
-        } else {
-            product.price
+        var price = product.price
+        
+        // 1. Offerta fissa: -10% su tutte le Bevande
+        if (product.category == "Bevande") {
+            price *= 0.90
         }
+        
+        // 2. Coupon Pasta (se attivato da Michele e pubblicato da admin)
+        if (isPastaCouponPublished && isPastaCouponActive && product.category == "Alimentari") {
+            price *= 0.85
+        }
+        
+        return price
     }
 
     val cart = mutableListOf<CartItem>()
@@ -36,7 +45,13 @@ object FakeRepository {
     }
 
     var isPastaCouponActive: Boolean = false
-    var isCouponPublishedByAdmin: Boolean = true
+    
+    // Flag per la pubblicazione individuale dei coupon da parte dell'admin
+    var isPastaCouponPublished: Boolean = true
+    var isGiftCouponPublished: Boolean = true
+    var isShopOnlyCouponPublished: Boolean = true
+
+    var isShopOnlyCouponActive: Boolean = false
 
     val applications = listOf(
         JobApplication("Marco Rossi", "Scaffalista", "20/05/2024"),

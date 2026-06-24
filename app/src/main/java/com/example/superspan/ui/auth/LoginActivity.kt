@@ -43,9 +43,15 @@ class LoginActivity : AppCompatActivity() {
                     editor.putString("email", email)
                     editor.putString("pass", pass)
                 } else {
-                    editor.clear()
+                    // Rimuoviamo solo i dati di login, non tutte le preferenze
+                    editor.remove("email")
+                    editor.remove("pass")
                 }
                 editor.apply()
+
+                // Pulizia errori prima del login
+                binding.tilEmail.error = null
+                binding.tilPassword.error = null
 
                 // 3. SEPARAZIONE RUOLI (Admin vs Cliente)
                 if (email == "admin" && pass == "admin") {
