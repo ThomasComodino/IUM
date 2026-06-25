@@ -82,6 +82,7 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:text="PROCEDI AL PAGAMENTO"
+            android:textAllCaps="true"
             android:layout_marginTop="16dp"
             android:backgroundTint="@color/orange_accent"
             app:layout_constraintTop_toBottomOf="@id/tvTotalLabel"/>

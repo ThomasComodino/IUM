@@ -93,7 +93,8 @@ class CheckoutFragment : Fragment() {
                 binding.tilAddress.error = "Inserisci un indirizzo per la consegna"
             } else {
                 binding.tilAddress.error = null
-                showConfirmationDialog(address)
+                // Passiamo al riepilogo
+                findNavController().navigate(R.id.action_checkoutFragment_to_orderSummaryFragment)
             }
         }
     }
@@ -132,23 +133,6 @@ class CheckoutFragment : Fragment() {
             }, "Android")
             loadDataWithBaseURL("https://appassets.androidview.com", mapHtml, "text/html", "UTF-8", null)
         }
-    }
-
-    private fun showConfirmationDialog(address: String) {
-        com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Conferma Ordine")
-            .setMessage("L'ordine verrà inviato a: $address. Vuoi procedere con il pagamento?")
-            .setNegativeButton("Modifica", null)
-            .setPositiveButton("Paga ora") { _, _ ->
-                // Salviamo l'ordine e l'indirizzo nel repository reale
-                val total = FakeRepository.getTotal()
-                FakeRepository.addOrder(FakeRepository.cart, total, address)
-
-                FakeRepository.cart.clear()
-                Toast.makeText(requireContext(), "Pagamento riuscito!", Toast.LENGTH_LONG).show()
-                findNavController().navigate(R.id.homeFragment)
-            }
-            .show()
     }
 
     override fun onDestroyView() {

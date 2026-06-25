@@ -48,10 +48,10 @@ class ProfileFragment : Fragment() {
 
         // Nuovi listener per le card di Claudia
         binding.cardOrders.setOnClickListener {
-            findNavController().navigate(R.id.ordersFragment)
+            findNavController().navigate(R.id.action_profileFragment_to_ordersFragment)
         }
         binding.cardAddresses.setOnClickListener {
-            findNavController().navigate(R.id.addressesFragment)
+            findNavController().navigate(R.id.action_profileFragment_to_addressesFragment)
         }
 
         // Logout

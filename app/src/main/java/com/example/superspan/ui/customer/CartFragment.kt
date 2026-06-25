@@ -48,8 +48,7 @@ class CartFragment : Fragment() {
             if (FakeRepository.cart.isEmpty()) {
                 Toast.makeText(requireContext(), "Il carrello è vuoto!", Toast.LENGTH_SHORT).show()
             } else {
-                findNavController().navigate(R.id.action_cartFragment_to_checkoutFragment)
-                // Al prossimo step faremo la navigazione vera alla mappa!
+                findNavController().navigate(R.id.action_cartFragment_to_storeSelectionFragment)
             }
         }
     }

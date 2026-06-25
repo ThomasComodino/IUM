@@ -73,7 +73,8 @@
         android:id="@+id/btnConfirmOrder"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:text="CONFERMA INDIRIZZO E PAGA"
+        android:text="VAI AL RIEPILOGO"
+        android:textAllCaps="true"
         android:textSize="16sp"
         android:backgroundTint="@color/green_super"/>
 

@@ -14,20 +14,52 @@
     <fragment
         android:id="@+id/cartFragment"
         android:name="com.example.superspan.ui.customer.CartFragment"
-        android:label="Carrello" />
-    <action
-        android:id="@+id/action_cartFragment_to_checkoutFragment"
-        app:destination="@id/checkoutFragment" />
+        android:label="Carrello" >
+        <action
+            android:id="@+id/action_cartFragment_to_storeSelectionFragment"
+            app:destination="@id/storeSelectionFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.superspan.ui.customer.ProfileFragment"
-        android:label="Profilo" />
+        android:label="Profilo" >
+        <action
+            android:id="@+id/action_profileFragment_to_addressesFragment"
+            app:destination="@id/addressesFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_ordersFragment"
+            app:destination="@id/ordersFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/storeSelectionFragment"
+        android:name="com.example.superspan.ui.customer.StoreSelectionFragment"
+        android:label="Selezione Punto Vendita" >
+        <action
+            android:id="@+id/action_storeSelectionFragment_to_checkoutFragment"
+            app:destination="@id/checkoutFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/checkoutFragment"
         android:name="com.example.superspan.ui.customer.CheckoutFragment"
-        android:label="Checkout" />
+        android:label="Checkout" >
+        <action
+            android:id="@+id/action_checkoutFragment_to_orderSummaryFragment"
+            app:destination="@id/orderSummaryFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/orderSummaryFragment"
+        android:name="com.example.superspan.ui.customer.OrderSummaryFragment"
+        android:label="Riepilogo Ordine" >
+        <action
+            android:id="@+id/action_orderSummaryFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 
     <fragment
         android:id="@+id/productDetailFragment"

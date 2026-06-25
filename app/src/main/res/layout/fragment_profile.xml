@@ -10,7 +10,7 @@
         android:id="@+id/tvProfileTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Il tuo Profilo"
+        android:text="Il Tuo Profilo"
         android:textSize="26sp"
         android:textStyle="bold"
         android:textColor="@color/green_super"
@@ -36,7 +36,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Carta SUperSpan"
+                android:text="Carta SuperSpan"
                 android:textColor="@color/white"
                 android:textStyle="bold"/>
 
@@ -87,7 +87,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="I miei ordini"
+                    android:text="I Miei Ordini"
                     android:textSize="14sp"
                     android:textStyle="bold"
                     android:layout_marginTop="8dp"
@@ -120,7 +120,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Indirizzi salvati"
+                    android:text="Indirizzi Salvati"
                     android:textSize="14sp"
                     android:textStyle="bold"
                     android:layout_marginTop="8dp"
@@ -155,7 +155,7 @@
         android:id="@+id/tvNoFavorites"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Nessun preferito salvato"
+        android:text="Nessun Preferito Salvato"
         android:visibility="gone"
         app:layout_constraintTop_toTopOf="@id/rvFavorites"
         app:layout_constraintBottom_toBottomOf="@id/rvFavorites"
@@ -168,6 +168,7 @@
         android:layout_width="0dp"
         android:layout_height="55dp"
         android:text="ESCI DALL'ACCOUNT"
+        android:textAllCaps="true"
         android:textColor="@color/red_error"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
