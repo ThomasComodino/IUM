@@ -10,5 +10,6 @@
     <color name="orange_accent">#FF9800</color> <!-- Arancione per Sconti e Offerte -->
     <color name="bg_gray">#F5F5F5</color>      <!-- Grigio chiaro per lo sfondo dell'app -->
     <color name="black_text">#212121</color>   <!-- Testo principale scuro -->
+    <color name="gray_text">#757575</color>    <!-- Testo secondario grigio -->
     <color name="red_error">#D32F2F</color>    <!-- Rosso per errori o cestino -->
 </resources>

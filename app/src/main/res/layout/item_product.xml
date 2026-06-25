@@ -39,18 +39,41 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/btnAdd"/>
 
-        <!-- Prezzo del prodotto -->
-        <TextView
-            android:id="@+id/tvPrice"
-            android:layout_width="wrap_content"
+        <!-- Layout dei Prezzi nella Home -->
+        <LinearLayout
+            android:id="@+id/layoutPricesHome"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="€ 1.99"
-            android:textSize="14sp"
-            android:textColor="@color/black_text"
+            android:orientation="horizontal"
             android:layout_marginTop="8dp"
+            android:gravity="bottom"
             app:layout_constraintTop_toBottomOf="@id/tvName"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintEnd_toStartOf="@id/btnAdd"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <!-- Prezzo Finale (quello che si paga) -->
+            <TextView
+                android:id="@+id/tvPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="€ 1.99"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/green_super"/>
+
+            <!-- Prezzo Vecchio (nascosto di default) -->
+            <TextView
+                android:id="@+id/tvOldPriceHome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="€ 2.50"
+                android:textSize="12sp"
+                android:textColor="#999999"
+                android:layout_marginStart="6dp"
+                android:visibility="gone"/>
+
+        </LinearLayout>
 
         <!-- Bottone "+" per aggiungere al carrello velocemente -->
         <com.google.android.material.button.MaterialButton

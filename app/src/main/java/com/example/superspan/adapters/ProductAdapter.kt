@@ -29,15 +29,25 @@ class ProductAdapter(
         val product = products[position]
         with(holder.binding) {
             tvName.text = product.name
-
-            // --- CAMBIAMENTO QUI: Chiediamo il prezzo finale aggiornato ---
+            
+            // Chiediamo il prezzo finale aggiornato al repository
             val finalPrice = FakeRepository.getFinalPrice(product)
             tvPrice.text = "€ " + String.format("%.2f", finalPrice)
 
-            // Click sulla card per il dettaglio
-            root.setOnClickListener { onProductClick(product) }
+            // --- LOGICA PREZZO SBARRATO NELLA HOME ---
+            if (finalPrice < product.price) {
+                // Se c'è uno sconto attivo (es. coupon di Michele)
+                tvOldPriceHome.visibility = android.view.View.VISIBLE
+                tvOldPriceHome.text = "€ " + String.format("%.2f", product.price)
+                // Applichiamo la sbarra sopra il testo
+                tvOldPriceHome.paintFlags = tvOldPriceHome.paintFlags or android.graphics.Paint.STRIKE_THRU_TEXT_FLAG
+            } else {
+                // Altrimenti nascondiamo il prezzo vecchio
+                tvOldPriceHome.visibility = android.view.View.GONE
+            }
 
-            // Click sul tasto "+" rapido
+            // Navigazione e aggiunta rapida
+            root.setOnClickListener { onProductClick(product) }
             btnAdd.setOnClickListener { onAddClick(product) }
         }
     }

@@ -14,20 +14,35 @@
         android:textColor="@color/green_super"
         android:layout_margin="24dp"/>
 
-    <TextView
-        android:id="@+id/tvNoCoupons"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Al momento non ci sono coupon disponibili.\nTorna a trovarci presto!"
-        android:textAlignment="center"
-        android:textSize="18sp"
-        android:textColor="@color/black_text"
-        android:layout_marginTop="100dp"
-        android:padding="20dp"
-        android:visibility="gone" />
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-    <!-- La card del coupon -->
-    <include android:id="@+id/layoutCoupon" layout="@layout/item_coupon" />
-    <include android:id="@+id/layoutGift" layout="@layout/item_coupon_gift" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="24dp">
+
+            <TextView
+                android:id="@+id/tvNoCoupons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Al momento non ci sono coupon disponibili.\nTorna a trovarci presto!"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                android:textColor="@color/black_text"
+                android:layout_marginTop="60dp"
+                android:padding="20dp"
+                android:visibility="gone" />
+
+            <!-- La card del coupon -->
+            <include android:id="@+id/layoutCoupon" layout="@layout/item_coupon" />
+            <include android:id="@+id/layoutShopOnly" layout="@layout/item_coupon" />
+            <include android:id="@+id/layoutGift" layout="@layout/item_coupon_gift" />
+
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>
