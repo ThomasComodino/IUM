@@ -34,10 +34,13 @@
                 android:orientation="vertical">
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                     android:text="Ordini Ricevuti (Oggi)" android:textSize="14sp" android:textColor="@color/black_text"/>
+                <TextView
+                    android:id="@+id/tvOrdersCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0" android:textSize="36sp" android:textStyle="bold" android:textColor="@color/green_super"/>
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="142" android:textSize="36sp" android:textStyle="bold" android:textColor="@color/green_super"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="+12% rispetto a ieri" android:textSize="12sp" android:textColor="@color/green_super"/>
+                    android:text="Totale ordini ricevuti" android:textSize="12sp" android:textColor="@color/green_super"/>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -55,10 +58,13 @@
                 android:orientation="vertical">
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                     android:text="Coupon Attivati" android:textSize="14sp" android:textColor="@color/black_text"/>
+                <TextView
+                    android:id="@+id/tvCouponsCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0" android:textSize="36sp" android:textStyle="bold" android:textColor="@color/orange_accent"/>
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="89" android:textSize="36sp" android:textStyle="bold" android:textColor="@color/orange_accent"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="Promozione Pasta attiva" android:textSize="12sp"/>
+                    android:text="Promozioni attive" android:textSize="12sp"/>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -75,8 +81,11 @@
                 android:orientation="vertical">
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                     android:text="Nuove Candidature Lavoro" android:textSize="14sp" android:textColor="@color/black_text"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="3" android:textSize="36sp" android:textStyle="bold" android:textColor="#2196F3"/>
+                <TextView
+                    android:id="@+id/tvJobsCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0" android:textSize="36sp" android:textStyle="bold" android:textColor="#2196F3"/>
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                     android:text="Controlla la sezione Lavoro" android:textSize="12sp"/>
             </LinearLayout>

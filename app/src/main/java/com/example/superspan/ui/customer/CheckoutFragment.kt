@@ -93,8 +93,11 @@ class CheckoutFragment : Fragment() {
                 binding.tilAddress.error = "Inserisci un indirizzo per la consegna"
             } else {
                 binding.tilAddress.error = null
-                // Passiamo al riepilogo
-                findNavController().navigate(R.id.action_checkoutFragment_to_orderSummaryFragment)
+                // Passiamo al riepilogo con l'indirizzo
+                val bundle = Bundle().apply {
+                    putString("deliveryAddress", address)
+                }
+                findNavController().navigate(R.id.action_checkoutFragment_to_orderSummaryFragment, bundle)
             }
         }
     }

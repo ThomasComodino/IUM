@@ -14,20 +14,18 @@ object FakeRepository {
     fun getFinalPrice(product: Product): Double {
         var price = product.price
         
-        // 1. Offerta fissa: -10% su tutte le Bevande
-        if (product.category == "Bevande") {
-            price *= 0.90
-        }
-        
-        // 2. Coupon Pasta (se attivato da Michele e pubblicato da admin)
-        if (isPastaCouponPublished && isPastaCouponActive && product.category == "Alimentari") {
-            price *= 0.85
+        // Applichiamo i coupon online attivati
+        adminCoupons.filter { it.isActive && it.isOnline && it.type == "SCONTO" }.forEach { coupon ->
+            if (activatedCouponIds.contains(coupon.id) && product.category == coupon.category) {
+                price *= (1.0 - (coupon.discountPercent?.toDouble() ?: 0.0) / 100.0)
+            }
         }
         
         return price
     }
 
     val cart = mutableListOf<CartItem>()
+    val activatedCouponIds = mutableSetOf<Int>()
 
     fun addToCart(product: Product) {
         val existingItem = cart.find { it.product.id == product.id }
@@ -44,19 +42,28 @@ object FakeRepository {
         }
     }
 
-    var isPastaCouponActive: Boolean = false
-    
-    // Flag per la pubblicazione individuale dei coupon da parte dell'admin
-    var isPastaCouponPublished: Boolean = true
-    var isGiftCouponPublished: Boolean = true
-    var isShopOnlyCouponPublished: Boolean = true
+    // Elenco Coupon gestiti dall'admin
+    val adminCoupons = mutableListOf(
+        Coupon(1, "Sconto del 15% su Alimentari", "01/01/2024", true, isOnline = true, type = "SCONTO", category = "Alimentari", discountPercent = 15),
+        Coupon(2, "Sconto del 10% su Bevande", "31/12/2026", true, isOnline = true, type = "SCONTO", category = "Bevande", discountPercent = 10),
+        Coupon(3, "Regalo di Benvenuto", "31/12/2026", true, isOnline = false, type = "GIFT", productIds = listOf(2, 3, 4)),
+        Coupon(4, "Sconto del 20% su Casalinghi", "31/12/2026", true, isOnline = false, type = "SCONTO", category = "Casalinghi", discountPercent = 20)
+    )
 
-    var isShopOnlyCouponActive: Boolean = false
+    val promotions = mutableListOf(
+        Promotion(1, "Sconto Bevande", "Bevande", 10, "31/12/2024"),
+        Promotion(2, "Sconto Colazione", "Dolci", 5, "15/06/2024")
+    )
 
-    val applications = listOf(
-        JobApplication("Marco Rossi", "Scaffalista", "20/05/2024"),
-        JobApplication("Anna Bianchi", "Cassiera", "19/05/2024"),
-        JobApplication("Luca Verdi", "Magazziniere", "18/05/2024")
+    val jobOffers = mutableListOf(
+        JobOffer(1, "Cassiera Part-Time", "Gestione cassa e clienti.", "Milano Central", "Determinato"),
+        JobOffer(2, "Scaffalista", "Caricamento scaffali e magazzino.", "Milano Bovisa", "Indeterminato")
+    )
+
+    val applications = mutableListOf(
+        JobApplication("Marco Rossi", "Scaffalista", "20/05/2024", "Milano Bovisa"),
+        JobApplication("Anna Bianchi", "Cassiera", "19/05/2024", "Milano Central"),
+        JobApplication("Luca Verdi", "Magazziniere", "18/05/2024", "Milano Bovisa")
     )
 
     val favorites = mutableListOf<FavoriteItem>()

@@ -26,4 +26,9 @@
         android:name="com.example.superspan.ui.admin.AdminCouponsFragment"
         android:label="Gestione Coupon" />
 
+    <fragment
+        android:id="@+id/adminPromotionsFragment"
+        android:name="com.example.superspan.ui.admin.AdminPromotionsFragment"
+        android:label="Gestione Offerte" />
+
 </navigation>

@@ -12,4 +12,8 @@
         android:id="@+id/adminCouponsFragment"
         android:title="Coupon"
         android:icon="@android:drawable/ic_menu_agenda"/>
+    <item
+        android:id="@+id/adminPromotionsFragment"
+        android:title="Offerte"
+        android:icon="@android:drawable/ic_menu_today"/>
 </menu>

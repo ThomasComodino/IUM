@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -24,6 +25,14 @@
         android:textSize="18sp"
         android:layout_marginTop="4dp"/>
 
+    <TextView
+        android:id="@+id/tvDetailLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sede: Milano Bovisa"
+        android:textSize="14sp"
+        android:layout_marginTop="2dp"/>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -33,14 +42,55 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sintesi Profilo:"
-        android:textStyle="bold"/>
+        android:text="Documentazione:"
+        android:textStyle="bold"
+        android:textSize="16sp"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnViewCV"
+        style="@style/Widget.Material3.Button.TonalButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="APRI CV (PDF)"
+        android:layout_marginTop="8dp"
+        app:icon="@android:drawable/ic_menu_save"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnViewVideo"
+        style="@style/Widget.Material3.Button.TonalButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="GUARDA VIDEO PRESENTAZIONE"
+        android:layout_marginTop="8dp"
+        app:icon="@android:drawable/ic_menu_slideshow"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#DDDDDD"
+        android:layout_marginVertical="20dp"/>
 
     <TextView
-        android:id="@+id/tvExperience"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Esperienza: 3 anni nel settore retail. Disponibile a turni weekend."
+        android:text="Azioni Responsabile:"
+        android:textStyle="bold"
+        android:textSize="16sp"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnForwardHR"
+        style="@style/Widget.Material3.Button.OutlinedButton"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:text="INOLTRA A HR SPECIALIST"
+        android:layout_marginTop="12dp"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnForwardStore"
+        style="@style/Widget.Material3.Button.OutlinedButton"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:text="INOLTRA A RESP. NEGOZIO"
         android:layout_marginTop="8dp"/>
 
     <com.google.android.material.button.MaterialButton
@@ -48,7 +98,7 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:text="APPROVA E CONTATTA"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="24dp"
         android:backgroundTint="@color/green_super"/>
 
 </LinearLayout>

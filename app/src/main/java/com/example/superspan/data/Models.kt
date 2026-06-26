@@ -21,14 +21,40 @@ data class CartItem(
 data class Coupon(
     val id: Int,
     val title: String,
-    val requiredItemsCount: Int,
-    var isActive: Boolean
+    val expiryDate: String,
+    var isActive: Boolean = true,
+    val isOnline: Boolean = true,
+    val type: String = "SCONTO", // SCONTO, GIFT
+    val category: String? = null,
+    val discountPercent: Int? = null,
+    val productIds: List<Int> = emptyList() // Per i 3 prodotti della campagna GIFT
 )
 
 data class JobApplication(
     val candidateName: String,
     val role: String,
-    val date: String
+    val date: String,
+    val location: String = "Milano", // Aggiunto per filtri
+    val cvUrl: String = "cv.pdf",
+    val videoUrl: String = "video.mp4"
+)
+
+data class JobOffer(
+    val id: Int,
+    val title: String,
+    val description: String,
+    val location: String,
+    val contractType: String,
+    var isActive: Boolean = true
+)
+
+data class Promotion(
+    val id: Int,
+    val title: String,
+    val category: String,
+    val discountPercent: Int,
+    val validUntil: String,
+    var isActive: Boolean = true
 )
 
 data class FavoriteItem(

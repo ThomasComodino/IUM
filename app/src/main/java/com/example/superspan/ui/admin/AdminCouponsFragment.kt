@@ -4,10 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.superspan.R
+import com.example.superspan.adapters.AdminCouponsAdapter
 import com.example.superspan.data.FakeRepository
+import com.example.superspan.data.Coupon
+import com.example.superspan.databinding.DialogAddCouponBinding
 import com.example.superspan.databinding.FragmentAdminCouponsBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
@@ -22,102 +27,167 @@ class AdminCouponsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        updateUI()
 
-        // Toggle Sconto Pasta
-        binding.btnTogglePasta.setOnClickListener {
-            val currentlyActive = FakeRepository.isPastaCouponPublished
-            val action = if (currentlyActive) "disattivare" else "attivare"
-            
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Conferma Azione")
-                .setMessage("Vuoi davvero $action lo Sconto Pasta?")
-                .setNegativeButton("Annulla", null)
-                .setPositiveButton("Conferma") { _, _ ->
-                    FakeRepository.isPastaCouponPublished = !currentlyActive
-                    updateUI()
-                    val msg = if (FakeRepository.isPastaCouponPublished) "Sconto Pasta attivato!" else "Sconto Pasta disattivato!"
-                    Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
-                }
-                .show()
-        }
+        val adapter = AdminCouponsAdapter(
+            FakeRepository.adminCoupons,
+            onToggleClick = { coupon ->
+                val currentlyActive = coupon.isActive
+                val action = if (currentlyActive) "disattivare" else "attivare"
+                
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("Conferma")
+                    .setMessage("Vuoi davvero $action il coupon '${coupon.title}'?")
+                    .setNegativeButton("Annulla", null)
+                    .setPositiveButton("Conferma") { _, _ ->
+                        coupon.isActive = !currentlyActive
+                        updateUI()
+                        Toast.makeText(requireContext(), "Coupon aggiornato", Toast.LENGTH_SHORT).show()
+                    }.show()
+            },
+            onDeleteClick = { coupon ->
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("Elimina Coupon")
+                    .setMessage("Vuoi eliminare definitivamente questo coupon?")
+                    .setNegativeButton("Annulla", null)
+                    .setPositiveButton("Elimina") { _, _ ->
+                        FakeRepository.adminCoupons.remove(coupon)
+                        updateUI()
+                        Toast.makeText(requireContext(), "Coupon eliminato", Toast.LENGTH_SHORT).show()
+                    }.show()
+            }
+        )
 
-        // Toggle Regalo Benvenuto
-        binding.btnToggleGift.setOnClickListener {
-            val currentlyActive = FakeRepository.isGiftCouponPublished
-            val action = if (currentlyActive) "disattivare" else "attivare"
+        binding.rvAdminCoupons.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvAdminCoupons.adapter = adapter
 
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Conferma Azione")
-                .setMessage("Vuoi davvero $action il Regalo di Benvenuto?")
-                .setNegativeButton("Annulla", null)
-                .setPositiveButton("Conferma") { _, _ ->
-                    FakeRepository.isGiftCouponPublished = !currentlyActive
-                    updateUI()
-                    val msg = if (FakeRepository.isGiftCouponPublished) "Regalo attivato!" else "Regalo disattivato!"
-                    Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
-                }
-                .show()
-        }
+        // Aggiungiamo lo scorrimento se necessario
+        binding.rvAdminCoupons.isNestedScrollingEnabled = false
 
-        // Toggle Sconto Negozio
-        binding.btnToggleShop.setOnClickListener {
-            val currentlyActive = FakeRepository.isShopOnlyCouponPublished
-            val action = if (currentlyActive) "disattivare" else "attivare"
-
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Conferma Azione")
-                .setMessage("Vuoi davvero $action lo Sconto Negozio?")
-                .setNegativeButton("Annulla", null)
-                .setPositiveButton("Conferma") { _, _ ->
-                    FakeRepository.isShopOnlyCouponPublished = !currentlyActive
-                    updateUI()
-                    val msg = if (FakeRepository.isShopOnlyCouponPublished) "Sconto Negozio attivato!" else "Sconto Negozio disattivato!"
-                    Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
-                }
-                .show()
+        binding.fabAddCoupon.setOnClickListener {
+            showAddCouponDialog()
         }
     }
 
+    private fun showAddCouponDialog() {
+        val dialogBinding = DialogAddCouponBinding.inflate(layoutInflater)
+        val productsNames = FakeRepository.products.map { it.name }.toTypedArray()
+        val selectedItems = mutableListOf<Int>()
+
+        // Setup Dropdown Categorie
+        val categories = listOf("Alimentari", "Bevande", "Dolci", "Casalinghi")
+        val catAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, categories)
+        dialogBinding.autoCompleteCategory.setAdapter(catAdapter)
+
+        // Logica visibilità condizionale
+        dialogBinding.rgCouponUsage.setOnCheckedChangeListener { _, checkedId ->
+            if (checkedId == R.id.rbOnline) {
+                dialogBinding.rgStoreType.visibility = View.GONE
+                dialogBinding.layoutDiscountFields.visibility = View.VISIBLE
+                dialogBinding.layoutGiftFields.visibility = View.GONE
+                dialogBinding.tilCouponTitle.visibility = View.GONE
+            } else {
+                dialogBinding.rgStoreType.visibility = View.VISIBLE
+                // Trigger logica sottogruppo
+                dialogBinding.rgStoreType.check(R.id.rbStoreDiscount)
+            }
+        }
+
+        dialogBinding.rgStoreType.setOnCheckedChangeListener { _, checkedId ->
+            if (checkedId == R.id.rbStoreDiscount) {
+                dialogBinding.layoutDiscountFields.visibility = View.VISIBLE
+                dialogBinding.layoutGiftFields.visibility = View.GONE
+                dialogBinding.tilCouponTitle.visibility = View.GONE
+            } else {
+                dialogBinding.layoutDiscountFields.visibility = View.GONE
+                dialogBinding.layoutGiftFields.visibility = View.VISIBLE
+                dialogBinding.tilCouponTitle.visibility = View.VISIBLE
+            }
+        }
+
+        // Inizializzazione corretta
+        if (dialogBinding.rbOnline.isChecked || dialogBinding.rbStoreDiscount.isChecked) {
+            dialogBinding.tilCouponTitle.visibility = View.GONE
+        }
+
+        dialogBinding.btnSelectProducts.setOnClickListener {
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Seleziona 3 Prodotti")
+                .setMultiChoiceItems(productsNames, null) { _, which, isChecked ->
+                    if (isChecked) selectedItems.add(which) else selectedItems.remove(which)
+                }
+                .setPositiveButton("OK") { _, _ ->
+                    dialogBinding.tvSelectedCount.text = "Prodotti selezionati: ${selectedItems.size}"
+                }
+                .show()
+        }
+
+        // Setup DatePicker
+        dialogBinding.etCouponExpiry.setOnClickListener {
+            val calendar = java.util.Calendar.getInstance()
+            val datePicker = android.app.DatePickerDialog(
+                requireContext(),
+                { _, year, month, dayOfMonth ->
+                    val selectedDate = "${String.format("%02d", dayOfMonth)}/${String.format("%02d", month + 1)}/$year"
+                    dialogBinding.etCouponExpiry.setText(selectedDate)
+                },
+                calendar.get(java.util.Calendar.YEAR),
+                calendar.get(java.util.Calendar.MONTH),
+                calendar.get(java.util.Calendar.DAY_OF_MONTH)
+            )
+            datePicker.datePicker.minDate = System.currentTimeMillis() - 1000
+            datePicker.show()
+        }
+
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Nuovo Coupon")
+            .setView(dialogBinding.root)
+            .setNegativeButton("Annulla", null)
+            .setPositiveButton("Crea") { _, _ ->
+                val date = dialogBinding.etCouponExpiry.text.toString()
+                val isOnline = dialogBinding.rbOnline.isChecked
+                
+                if (date.isBlank()) {
+                    Toast.makeText(requireContext(), "Scadenza obbligatoria!", Toast.LENGTH_SHORT).show()
+                    return@setPositiveButton
+                }
+
+                val newId = (FakeRepository.adminCoupons.maxOfOrNull { it.id } ?: 0) + 1
+                
+                if (isOnline || dialogBinding.rbStoreDiscount.isChecked) {
+                    val discount = dialogBinding.etDiscount.text.toString().toIntOrNull() ?: 0
+                    val category = dialogBinding.autoCompleteCategory.text.toString()
+                    
+                    if (discount > 0 && category.isNotBlank()) {
+                        val autoTitle = "Sconto del $discount% su $category"
+                        FakeRepository.adminCoupons.add(0, Coupon(newId, autoTitle, date, true, isOnline, "SCONTO", category, discount))
+                        updateUI()
+                        Toast.makeText(requireContext(), "Coupon '$autoTitle' creato!", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(requireContext(), "Inserisci sconto e categoria!", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    // STORE GIFT
+                    val title = dialogBinding.etCouponTitle.text.toString()
+                    if (title.isBlank()) {
+                        Toast.makeText(requireContext(), "Titolo obbligatorio per i regali!", Toast.LENGTH_SHORT).show()
+                        return@setPositiveButton
+                    }
+
+                    if (selectedItems.size == 3) {
+                        val productIds = selectedItems.map { FakeRepository.products[it].id }
+                        FakeRepository.adminCoupons.add(0, Coupon(newId, title, date, true, false, "GIFT", productIds = productIds))
+                        updateUI()
+                        Toast.makeText(requireContext(), "Coupon regalo creato!", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(requireContext(), "Seleziona esattamente 3 prodotti!", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+            .show()
+    }
+
     private fun updateUI() {
-        // Aggiorna Pasta
-        if (FakeRepository.isPastaCouponPublished) {
-            binding.tvPastaStatus.text = "STATO: ATTIVO (Visibile)"
-            binding.tvPastaStatus.setTextColor(resources.getColor(R.color.green_super))
-            binding.btnTogglePasta.text = "DISATTIVA"
-            binding.btnTogglePasta.setBackgroundColor(resources.getColor(R.color.red_error))
-        } else {
-            binding.tvPastaStatus.text = "STATO: DISATTIVATO (Nascosto)"
-            binding.tvPastaStatus.setTextColor(resources.getColor(R.color.red_error))
-            binding.btnTogglePasta.text = "ATTIVA"
-            binding.btnTogglePasta.setBackgroundColor(resources.getColor(R.color.green_super))
-        }
-
-        // Aggiorna Gift
-        if (FakeRepository.isGiftCouponPublished) {
-            binding.tvGiftStatus.text = "STATO: ATTIVO (Visibile)"
-            binding.tvGiftStatus.setTextColor(resources.getColor(R.color.green_super))
-            binding.btnToggleGift.text = "DISATTIVA"
-            binding.btnToggleGift.setBackgroundColor(resources.getColor(R.color.red_error))
-        } else {
-            binding.tvGiftStatus.text = "STATO: DISATTIVATO (Nascosto)"
-            binding.tvGiftStatus.setTextColor(resources.getColor(R.color.red_error))
-            binding.btnToggleGift.text = "ATTIVA"
-            binding.btnToggleGift.setBackgroundColor(resources.getColor(R.color.green_super))
-        }
-
-        // Aggiorna Shop Only
-        if (FakeRepository.isShopOnlyCouponPublished) {
-            binding.tvShopStatus.text = "STATO: ATTIVO (Visibile)"
-            binding.tvShopStatus.setTextColor(resources.getColor(R.color.green_super))
-            binding.btnToggleShop.text = "DISATTIVA"
-            binding.btnToggleShop.setBackgroundColor(resources.getColor(R.color.red_error))
-        } else {
-            binding.tvShopStatus.text = "STATO: DISATTIVATO (Nascosto)"
-            binding.tvShopStatus.setTextColor(resources.getColor(R.color.red_error))
-            binding.btnToggleShop.text = "ATTIVA"
-            binding.btnToggleShop.setBackgroundColor(resources.getColor(R.color.green_super))
-        }
+        (binding.rvAdminCoupons.adapter as AdminCouponsAdapter).updateList(FakeRepository.adminCoupons)
     }
 
     override fun onDestroyView() {

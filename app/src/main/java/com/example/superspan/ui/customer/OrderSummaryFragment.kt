@@ -25,9 +25,14 @@ class OrderSummaryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val total = FakeRepository.getTotal()
+        val address = arguments?.getString("deliveryAddress") ?: "N/D"
+        
         view.findViewById<TextView>(R.id.tvSummaryTotal).text = "€ " + String.format("%.2f", total)
 
         view.findViewById<MaterialButton>(R.id.btnFinalConfirm).setOnClickListener {
+            // Salviamo l'ordine nel repository prima di svuotare il carrello
+            FakeRepository.addOrder(FakeRepository.cart, total, address)
+
             // Svuota il carrello
             FakeRepository.cart.clear()
             
