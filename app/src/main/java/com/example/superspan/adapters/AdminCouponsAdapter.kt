@@ -35,6 +35,9 @@ class AdminCouponsAdapter(
             tvCouponStatus.setTextColor(Color.parseColor(state.second))
 
             btnToggle.text = if (coupon.isActive) "DISATTIVA" else "ATTIVA"
+            val color = if (coupon.isActive) "#D32F2F" else "#2E7D32"
+            btnToggle.setBackgroundColor(Color.parseColor(color))
+
             btnToggle.setOnClickListener { onToggleClick(coupon) }
             btnDelete.setOnClickListener { onDeleteClick(coupon) }
         }

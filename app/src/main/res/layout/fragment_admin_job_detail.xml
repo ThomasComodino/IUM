@@ -7,6 +7,15 @@
     android:padding="24dp"
     android:background="@color/white">
 
+    <ImageButton
+        android:id="@+id/btnBackDetail"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@android:drawable/ic_menu_revert"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:tint="@color/green_super"
+        android:layout_marginBottom="8dp"/>
+
     <TextView
         android:id="@+id/tvDetailCandidateName"
         android:layout_width="wrap_content"
@@ -97,7 +106,7 @@
         android:id="@+id/btnApprove"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:text="APPROVA E CONTATTA"
+        android:text="CONTATTA"
         android:layout_marginTop="24dp"
         android:backgroundTint="@color/green_super"/>
 

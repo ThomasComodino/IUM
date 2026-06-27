@@ -4,17 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_gray"
-    android:padding="16dp">
+    android:background="@color/bg_gray">
 
     <TextView
         android:id="@+id/tvAddressesTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Indirizzi salvati"
-        android:textSize="24sp"
+        android:textSize="26sp"
         android:textStyle="bold"
         android:textColor="@color/green_super"
+        android:layout_margin="24dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 
@@ -23,10 +23,10 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/tvAddressesTitle"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/layoutAddBtn"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvAddressesTitle"
         tools:listitem="@layout/item_address"/>
 
     <TextView
@@ -35,20 +35,30 @@
         android:layout_height="wrap_content"
         android:text="Nessun indirizzo salvato."
         android:visibility="gone"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="@id/rvAddresses"
+        app:layout_constraintBottom_toBottomOf="@id/rvAddresses"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabAddAddress"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/layoutAddBtn"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:src="@android:drawable/ic_input_add"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:tint="@color/white"
-        app:backgroundTint="@color/green_super"/>
+        android:background="@color/white"
+        android:padding="16dp"
+        android:elevation="8dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/fabAddAddress"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="AGGIUNGI"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:icon="@android:drawable/ic_input_add"
+            app:cornerRadius="12dp"
+            android:backgroundTint="@color/green_super" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

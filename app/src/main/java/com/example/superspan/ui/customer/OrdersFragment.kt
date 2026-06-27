@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.superspan.R
@@ -31,11 +32,17 @@ class OrdersFragment : Fragment() {
             rvOrders.visibility = View.VISIBLE
             tvNoOrders.visibility = View.GONE
             rvOrders.layoutManager = LinearLayoutManager(requireContext())
-            rvOrders.adapter = OrdersAdapter(FakeRepository.orders)
+            rvOrders.adapter = OrdersAdapter(FakeRepository.orders) { orderId ->
+                val bundle = Bundle().apply { putString("orderId", orderId) }
+                findNavController().navigate(R.id.orderDetailFragment, bundle)
+            }
         }
     }
 
-    class OrdersAdapter(private val orders: List<Order>) : RecyclerView.Adapter<OrdersAdapter.OrderViewHolder>() {
+    class OrdersAdapter(
+        private val orders: List<Order>,
+        private val onItemClick: (String) -> Unit
+    ) : RecyclerView.Adapter<OrdersAdapter.OrderViewHolder>() {
         
         class OrderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             val tvId: TextView = view.findViewById(R.id.tvOrderId)
@@ -55,6 +62,10 @@ class OrdersFragment : Fragment() {
             holder.tvStatus.text = order.status
             holder.tvDate.text = order.date
             holder.tvTotal.text = "€ %.2f".format(order.total)
+            
+            holder.itemView.setOnClickListener {
+                onItemClick(order.id)
+            }
         }
 
         override fun getItemCount() = orders.size

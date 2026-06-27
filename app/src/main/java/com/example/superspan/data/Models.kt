@@ -22,7 +22,7 @@ data class Coupon(
     val id: Int,
     val title: String,
     val expiryDate: String,
-    var isActive: Boolean = true,
+    var isActive: Boolean = false,
     val isOnline: Boolean = true,
     val type: String = "SCONTO", // SCONTO, GIFT
     val category: String? = null,
@@ -31,12 +31,14 @@ data class Coupon(
 )
 
 data class JobApplication(
+    val id: Int,
     val candidateName: String,
     val role: String,
     val date: String,
-    val location: String = "Milano", // Aggiunto per filtri
+    val location: String = "Milano",
     val cvUrl: String = "cv.pdf",
-    val videoUrl: String = "video.mp4"
+    val videoUrl: String = "video.mp4",
+    var jobOfferId: Int? = null // Collegamento alla posizione
 )
 
 data class JobOffer(
@@ -54,7 +56,7 @@ data class Promotion(
     val category: String,
     val discountPercent: Int,
     val validUntil: String,
-    var isActive: Boolean = true
+    var isActive: Boolean = false
 )
 
 data class FavoriteItem(
@@ -76,7 +78,8 @@ data class Order(
     val date: String,
     val total: Double,
     val status: String,
-    val items: List<CartItem>
+    val items: List<CartItem>,
+    val deliveryAddress: String = "N/D"
 )
 
 data class Address(

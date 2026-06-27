@@ -25,6 +25,10 @@ class AdminJobDetailFragment : Fragment(R.layout.fragment_admin_job_detail) {
             binding.tvDetailRole.text = c.role
             binding.tvDetailLocation.text = "Sede: ${c.location}"
 
+            binding.btnBackDetail.setOnClickListener {
+                parentFragmentManager.popBackStack()
+            }
+
             binding.btnViewCV.setOnClickListener {
                 Toast.makeText(requireContext(), "Apertura CV di ${c.candidateName}...", Toast.LENGTH_SHORT).show()
             }
@@ -43,11 +47,11 @@ class AdminJobDetailFragment : Fragment(R.layout.fragment_admin_job_detail) {
 
             binding.btnApprove.setOnClickListener {
                 MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Approva Candidato")
-                    .setMessage("Vuoi approvare ${c.candidateName} per la posizione di ${c.role}?")
+                    .setTitle("Contatta Candidato")
+                    .setMessage("Vuoi inviare una mail di convocazione a ${c.candidateName}?")
                     .setNegativeButton("Annulla", null)
-                    .setPositiveButton("Approva") { _, _ ->
-                        Toast.makeText(requireContext(), "Candidato approvato. Email di convocazione inviata!", Toast.LENGTH_LONG).show()
+                    .setPositiveButton("Invia") { _, _ ->
+                        Toast.makeText(requireContext(), "Email di convocazione inviata!", Toast.LENGTH_LONG).show()
                         parentFragmentManager.popBackStack()
                     }.show()
             }

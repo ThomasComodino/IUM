@@ -44,10 +44,12 @@ class CheckoutFragment : Fragment() {
                     fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat=' + latlng.lat + '&lon=' + latlng.lng)
                         .then(response => response.json())
                         .then(data => {
-                            if(data.display_name) {
-                                // Prendiamo solo la parte principale dell'indirizzo
-                                var shortAddress = data.display_name.split(',').slice(0, 2).join(',');
-                                Android.onAddressSelected(shortAddress);
+                            if(data.address) {
+                                var road = data.address.road || "";
+                                var houseNumber = data.address.house_number || "";
+                                var city = data.address.city || data.address.town || data.address.village || "";
+                                var streetAddress = road + (houseNumber ? " " + houseNumber : "");
+                                Android.onAddressSelected(streetAddress, city);
                             }
                         });
                 });
@@ -82,20 +84,30 @@ class CheckoutFragment : Fragment() {
 
         binding.tilAddress.setEndIconOnClickListener {
             val address = binding.etAddress.text.toString()
+            val city = binding.etCity.text.toString()
+            val fullQuery = if (city.isNotBlank()) "$address, $city" else address
             if (address.isNotBlank()) {
-                binding.webViewMap.evaluateJavascript("updateMap('$address')", null)
+                binding.webViewMap.evaluateJavascript("updateMap('$fullQuery')", null)
             }
         }
 
         binding.btnConfirmOrder.setOnClickListener {
             val address = binding.etAddress.text.toString()
+            val city = binding.etCity.text.toString()
+            
             if (address.isBlank()) {
-                binding.tilAddress.error = "Inserisci un indirizzo per la consegna"
+                binding.tilAddress.error = "Inserisci un indirizzo"
+            } else if (city.isBlank()) {
+                binding.tilAddress.error = null
+                binding.tilCity.error = "Inserisci la città"
             } else {
                 binding.tilAddress.error = null
-                // Passiamo al riepilogo con l'indirizzo
+                binding.tilCity.error = null
+                
+                // Passiamo al riepilogo con l'indirizzo completo
+                val fullAddress = "$address, $city"
                 val bundle = Bundle().apply {
-                    putString("deliveryAddress", address)
+                    putString("deliveryAddress", fullAddress)
                 }
                 findNavController().navigate(R.id.action_checkoutFragment_to_orderSummaryFragment, bundle)
             }
@@ -113,8 +125,20 @@ class CheckoutFragment : Fragment() {
                 val chip = com.google.android.material.chip.Chip(requireContext())
                 chip.text = addr.name
                 chip.setOnClickListener {
+                    // Se è un indirizzo salvato, lo formattiamo con il nome tra parentesi
+                    val formatted = "${addr.fullAddress} (${addr.name})"
                     binding.etAddress.setText(addr.fullAddress)
+                    binding.etCity.setText("") // Puliamo la città se usiamo un salvato (presumiamo sia già nell'indirizzo)
+                    
                     binding.webViewMap.evaluateJavascript("updateMap('${addr.fullAddress}')", null)
+                    
+                    // Sovrascriviamo l'azione del bottone per questo caso specifico o passiamo i dati
+                    binding.btnConfirmOrder.setOnClickListener {
+                        val bundle = Bundle().apply {
+                            putString("deliveryAddress", formatted)
+                        }
+                        findNavController().navigate(R.id.action_checkoutFragment_to_orderSummaryFragment, bundle)
+                    }
                 }
                 binding.cgSavedAddresses.addView(chip)
             }
@@ -128,9 +152,10 @@ class CheckoutFragment : Fragment() {
             webViewClient = WebViewClient()
             addJavascriptInterface(object {
                 @JavascriptInterface
-                fun onAddressSelected(address: String) {
+                fun onAddressSelected(address: String, city: String) {
                     activity?.runOnUiThread {
                         binding.etAddress.setText(address)
+                        binding.etCity.setText(city)
                     }
                 }
             }, "Android")

@@ -27,6 +27,7 @@ class AdminDashboardFragment : Fragment() {
         // Aggiorna i dati reali del repository nelle card
         binding.tvOrdersCount.text = FakeRepository.orders.size.toString()
         binding.tvCouponsCount.text = FakeRepository.adminCoupons.count { it.isActive }.toString()
+        binding.tvPromosCount.text = FakeRepository.promotions.count { it.isActive }.toString()
         binding.tvJobsCount.text = FakeRepository.applications.size.toString()
 
         binding.btnAdminLogout.setOnClickListener {

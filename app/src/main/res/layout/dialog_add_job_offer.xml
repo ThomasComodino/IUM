@@ -10,41 +10,41 @@
         android:padding="16dp">
 
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Titolo Posizione">
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etJobTitle"
+            android:hint="Ruolo">
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteRole"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textCapSentences"/>
+                android:inputType="none"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:hint="Sede">
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etJobLocation"
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteLocation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textCapWords"/>
+                android:inputType="none"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:hint="Tipologia Contratto">
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etContractType"
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteContract"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textCapWords"/>
+                android:inputType="none"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout

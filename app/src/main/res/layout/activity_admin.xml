@@ -8,6 +8,7 @@
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="32dp"
         app:defaultNavHost="true"
         app:navGraph="@navigation/admin_nav_graph"
         app:layout_constraintTop_toTopOf="parent"

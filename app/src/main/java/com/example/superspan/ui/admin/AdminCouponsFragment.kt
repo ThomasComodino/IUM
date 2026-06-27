@@ -159,9 +159,10 @@ class AdminCouponsFragment : Fragment() {
                     
                     if (discount > 0 && category.isNotBlank()) {
                         val autoTitle = "Sconto del $discount% su $category"
-                        FakeRepository.adminCoupons.add(0, Coupon(newId, autoTitle, date, true, isOnline, "SCONTO", category, discount))
+                        // Inizialmente disattivato
+                        FakeRepository.adminCoupons.add(0, Coupon(newId, autoTitle, date, false, isOnline, "SCONTO", category, discount))
                         updateUI()
-                        Toast.makeText(requireContext(), "Coupon '$autoTitle' creato!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Coupon '$autoTitle' creato (disattivato)!", Toast.LENGTH_SHORT).show()
                     } else {
                         Toast.makeText(requireContext(), "Inserisci sconto e categoria!", Toast.LENGTH_SHORT).show()
                     }
@@ -175,9 +176,10 @@ class AdminCouponsFragment : Fragment() {
 
                     if (selectedItems.size == 3) {
                         val productIds = selectedItems.map { FakeRepository.products[it].id }
-                        FakeRepository.adminCoupons.add(0, Coupon(newId, title, date, true, false, "GIFT", productIds = productIds))
+                        // Inizialmente disattivato
+                        FakeRepository.adminCoupons.add(0, Coupon(newId, title, date, false, false, "GIFT", productIds = productIds))
                         updateUI()
-                        Toast.makeText(requireContext(), "Coupon regalo creato!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Coupon regalo creato (disattivato)!", Toast.LENGTH_SHORT).show()
                     } else {
                         Toast.makeText(requireContext(), "Seleziona esattamente 3 prodotti!", Toast.LENGTH_SHORT).show()
                     }

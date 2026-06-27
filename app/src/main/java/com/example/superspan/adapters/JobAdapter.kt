@@ -34,19 +34,14 @@ class JobAdapter(
             tvRole.text = "Ruolo: ${application.role}"
             tvDate.text = "Inviato il: ${application.date}"
 
-            // Gestione del click sul pulsante "VEDI VIDEO CV"
-            btnViewCV.setOnClickListener {
-                Toast.makeText(
-                    holder.itemView.context,
-                    "Riproduzione Video CV di: ${application.candidateName}",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-
-            // Gestione del click su tutta la card per andare nel dettaglio
-            root.setOnClickListener {
+            // Gestione del click sul pulsante "APRI CANDIDATURA"
+            btnViewDetails.setOnClickListener {
                 onItemClick(application)
             }
+
+            // Click sulla card rimosso come richiesto (si usa solo il pulsante)
+            root.setOnClickListener(null)
+            root.isClickable = false
         }
     }
 

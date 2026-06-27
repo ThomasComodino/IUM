@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.superspan.adapters.ProductAdapter
@@ -20,7 +21,6 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
-    // Variabili di stato per filtri e ordinamento
     private var currentSearchText = ""
     private var currentCategory = "Tutti"
     private var onlyOffers = false
@@ -37,9 +37,7 @@ class HomeFragment : Fragment() {
         val adapter = ProductAdapter(
             products = FakeRepository.products,
             onProductClick = { product ->
-                val bundle = Bundle().apply {
-                    putInt("productId", product.id)
-                }
+                val bundle = Bundle().apply { putInt("productId", product.id) }
                 findNavController().navigate(R.id.productDetailFragment, bundle)
             },
             onAddClick = { product ->
@@ -51,7 +49,8 @@ class HomeFragment : Fragment() {
         binding.rvProducts.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.rvProducts.adapter = adapter
 
-        // 1. RICERCA PER NOME
+        updatePromoBanners()
+
         binding.etSearch.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 currentSearchText = s.toString()
@@ -61,7 +60,6 @@ class HomeFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
 
-        // 2. FILTRO CATEGORIE E OFFERTE
         binding.chipGroupFilters.setOnCheckedStateChangeListener { _, checkedIds ->
             val chipId = checkedIds.firstOrNull()
             onlyOffers = (chipId == R.id.chipOffers)
@@ -73,12 +71,68 @@ class HomeFragment : Fragment() {
             applyFilters()
         }
 
-        // 3. ORDINAMENTO PREZZO
         binding.btnSort.setOnClickListener {
             isAscending = !isAscending
-            val msg = if (isAscending) "Prezzo: dal più basso" else "Prezzo: dal più alto"
-            Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
             applyFilters()
+        }
+    }
+
+    private fun updatePromoBanners() {
+        binding.layoutPromoContainer.removeAllViews()
+        
+        val activePromos = FakeRepository.promotions.filter { promo ->
+            if (!promo.isActive) return@filter false
+            try {
+                val sdf = java.text.SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault())
+                val expiry = sdf.parse(promo.validUntil)
+                val now = sdf.parse(sdf.format(java.util.Date()))
+                expiry != null && !expiry.before(now)
+            } catch (e: Exception) {
+                true
+            }
+        }
+
+        activePromos.forEach { promo ->
+            val banner = com.google.android.material.card.MaterialCardView(requireContext()).apply {
+                val lp = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+                lp.setMargins(48, 16, 48, 8)
+                layoutParams = lp
+                radius = 32f
+                setCardBackgroundColor(resources.getColor(R.color.orange_accent))
+                
+                val rootLayout = LinearLayout(context).apply {
+                    orientation = LinearLayout.HORIZONTAL
+                    setPadding(48, 32, 48, 32)
+                    gravity = android.view.Gravity.CENTER_VERTICAL
+                }
+                
+                val icon = android.widget.ImageView(context).apply {
+                    layoutParams = LinearLayout.LayoutParams(80, 80)
+                    setImageResource(android.R.drawable.ic_menu_send)
+                    setColorFilter(android.graphics.Color.WHITE)
+                }
+                
+                val text = android.widget.TextView(context).apply {
+                    val tlp = LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                    )
+                    tlp.setMargins(32, 0, 0, 0)
+                    layoutParams = tlp
+                    text = "OFFERTA: ${promo.title}!"
+                    setTextColor(android.graphics.Color.WHITE)
+                    setTypeface(null, android.graphics.Typeface.BOLD)
+                    textSize = 14f
+                }
+                
+                rootLayout.addView(icon)
+                rootLayout.addView(text)
+                addView(rootLayout)
+            }
+            binding.layoutPromoContainer.addView(banner)
         }
     }
 

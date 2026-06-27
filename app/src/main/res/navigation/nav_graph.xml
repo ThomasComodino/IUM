@@ -77,6 +77,11 @@
         android:label="I miei Ordini" />
 
     <fragment
+        android:id="@+id/orderDetailFragment"
+        android:name="com.example.superspan.ui.customer.OrderDetailFragment"
+        android:label="Dettaglio Ordine" />
+
+    <fragment
         android:id="@+id/addressesFragment"
         android:name="com.example.superspan.ui.customer.AddressesFragment"
         android:label="Indirizzi Salvati" />

@@ -33,6 +33,21 @@
             android:inputType="textPostalAddress"/>
     </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilCity"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="Città">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etCity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textCapWords"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/cgSavedAddresses"
         android:layout_width="match_parent"

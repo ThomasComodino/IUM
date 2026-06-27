@@ -28,18 +28,35 @@ class AdminPromotionsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = AdminPromotionsAdapter(FakeRepository.promotions) { promo ->
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Rimuovi Offerta")
-                .setMessage("Sei sicuro di voler rimuovere l'offerta '${promo.title}'?")
-                .setNegativeButton("Annulla", null)
-                .setPositiveButton("Rimuovi") { _, _ ->
-                    FakeRepository.promotions.remove(promo)
-                    updateList()
-                    Toast.makeText(requireContext(), "Promozione rimossa con successo", Toast.LENGTH_SHORT).show()
-                }
-                .show()
-        }
+        val adapter = AdminPromotionsAdapter(
+            FakeRepository.promotions,
+            onToggleClick = { promo ->
+                val currentlyActive = promo.isActive
+                val action = if (currentlyActive) "disattivare" else "attivare"
+                
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("Conferma")
+                    .setMessage("Vuoi davvero $action l'offerta '${promo.title}'?")
+                    .setNegativeButton("Annulla", null)
+                    .setPositiveButton("Conferma") { _, _ ->
+                        promo.isActive = !currentlyActive
+                        updateList()
+                        Toast.makeText(requireContext(), "Offerta aggiornata", Toast.LENGTH_SHORT).show()
+                    }.show()
+            },
+            onDeleteClick = { promo ->
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("Rimuovi Offerta")
+                    .setMessage("Sei sicuro di voler rimuovere l'offerta '${promo.title}'?")
+                    .setNegativeButton("Annulla", null)
+                    .setPositiveButton("Rimuovi") { _, _ ->
+                        FakeRepository.promotions.remove(promo)
+                        updateList()
+                        Toast.makeText(requireContext(), "Promozione rimossa con successo", Toast.LENGTH_SHORT).show()
+                    }
+                    .show()
+            }
+        )
 
         binding.rvPromotions.layoutManager = LinearLayoutManager(requireContext())
         binding.rvPromotions.adapter = adapter
@@ -52,26 +69,42 @@ class AdminPromotionsFragment : Fragment() {
     private fun showAddPromotionDialog() {
         val dialogBinding = DialogAddPromotionBinding.inflate(layoutInflater)
         
-        // Setup dropdown categorie
         val categories = listOf("Alimentari", "Bevande", "Dolci", "Casalinghi")
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, categories)
         dialogBinding.autoCompleteCategory.setAdapter(adapter)
 
+        dialogBinding.etValidUntil.setOnClickListener {
+            val calendar = java.util.Calendar.getInstance()
+            val datePicker = android.app.DatePickerDialog(
+                requireContext(),
+                { _, year, month, dayOfMonth ->
+                    val selectedDate = "${String.format("%02d", dayOfMonth)}/${String.format("%02d", month + 1)}/$year"
+                    dialogBinding.etValidUntil.setText(selectedDate)
+                },
+                calendar.get(java.util.Calendar.YEAR),
+                calendar.get(java.util.Calendar.MONTH),
+                calendar.get(java.util.Calendar.DAY_OF_MONTH)
+            )
+            datePicker.datePicker.minDate = System.currentTimeMillis() - 1000
+            datePicker.show()
+        }
+
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Nuova Promozione")
+            .setTitle("Nuova Offerta")
             .setView(dialogBinding.root)
             .setNegativeButton("Annulla", null)
-            .setPositiveButton("Pubblica") { _, _ ->
-                val title = dialogBinding.etPromoTitle.text.toString()
+            .setPositiveButton("Crea") { _, _ ->
                 val category = dialogBinding.autoCompleteCategory.text.toString()
                 val discount = dialogBinding.etDiscount.text.toString().toIntOrNull() ?: 0
                 val date = dialogBinding.etValidUntil.text.toString()
 
-                if (title.isNotBlank() && category.isNotBlank() && discount > 0 && date.isNotBlank()) {
+                if (category.isNotBlank() && discount > 0 && date.isNotBlank()) {
+                    val title = "Sconto del $discount% su $category"
                     val newId = (FakeRepository.promotions.maxOfOrNull { it.id } ?: 0) + 1
-                    FakeRepository.promotions.add(Promotion(newId, title, category, discount, date))
+                    // Inizialmente disattivata
+                    FakeRepository.promotions.add(0, Promotion(newId, title, category, discount, date, false))
                     updateList()
-                    Toast.makeText(requireContext(), "Promozione pubblicata con successo", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Offerta creata (disattivata): $title", Toast.LENGTH_SHORT).show()
                 } else {
                     Toast.makeText(requireContext(), "Compila tutti i campi correttamente!", Toast.LENGTH_SHORT).show()
                 }

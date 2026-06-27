@@ -28,6 +28,7 @@ class OrderSummaryFragment : Fragment() {
         val address = arguments?.getString("deliveryAddress") ?: "N/D"
         
         view.findViewById<TextView>(R.id.tvSummaryTotal).text = "€ " + String.format("%.2f", total)
+        view.findViewById<TextView>(R.id.tvSummaryAddress).text = address
 
         view.findViewById<MaterialButton>(R.id.btnFinalConfirm).setOnClickListener {
             // Salviamo l'ordine nel repository prima di svuotare il carrello

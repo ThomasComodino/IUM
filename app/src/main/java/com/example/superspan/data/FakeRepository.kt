@@ -14,7 +14,14 @@ object FakeRepository {
     fun getFinalPrice(product: Product): Double {
         var price = product.price
         
-        // Applichiamo i coupon online attivati
+        // 1. Offerte Generali Attive (Promozioni)
+        promotions.filter { isPromotionValid(it) }.forEach { promo ->
+            if (product.category == promo.category) {
+                price *= (1.0 - (promo.discountPercent.toDouble() / 100.0))
+            }
+        }
+
+        // 2. Applichiamo i coupon online attivati
         adminCoupons.filter { it.isActive && it.isOnline && it.type == "SCONTO" }.forEach { coupon ->
             if (activatedCouponIds.contains(coupon.id) && product.category == coupon.category) {
                 price *= (1.0 - (coupon.discountPercent?.toDouble() ?: 0.0) / 100.0)
@@ -22,6 +29,18 @@ object FakeRepository {
         }
         
         return price
+    }
+
+    private fun isPromotionValid(promo: Promotion): Boolean {
+        if (!promo.isActive) return false
+        return try {
+            val sdf = java.text.SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault())
+            val expiry = sdf.parse(promo.validUntil)
+            val now = sdf.parse(sdf.format(java.util.Date()))
+            expiry != null && !expiry.before(now)
+        } catch (e: Exception) {
+            true
+        }
     }
 
     val cart = mutableListOf<CartItem>()
@@ -44,15 +63,15 @@ object FakeRepository {
 
     // Elenco Coupon gestiti dall'admin
     val adminCoupons = mutableListOf(
-        Coupon(1, "Sconto del 15% su Alimentari", "01/01/2024", true, isOnline = true, type = "SCONTO", category = "Alimentari", discountPercent = 15),
-        Coupon(2, "Sconto del 10% su Bevande", "31/12/2026", true, isOnline = true, type = "SCONTO", category = "Bevande", discountPercent = 10),
-        Coupon(3, "Regalo di Benvenuto", "31/12/2026", true, isOnline = false, type = "GIFT", productIds = listOf(2, 3, 4)),
-        Coupon(4, "Sconto del 20% su Casalinghi", "31/12/2026", true, isOnline = false, type = "SCONTO", category = "Casalinghi", discountPercent = 20)
+        Coupon(1, "Sconto del 15% su Alimentari", "01/01/2024", false, isOnline = true, type = "SCONTO", category = "Alimentari", discountPercent = 15),
+        Coupon(2, "Sconto del 10% su Bevande", "31/12/2026", false, isOnline = true, type = "SCONTO", category = "Bevande", discountPercent = 10),
+        Coupon(3, "Regalo di Benvenuto", "31/12/2026", false, isOnline = false, type = "GIFT", productIds = listOf(2, 3, 4)),
+        Coupon(4, "Sconto del 20% su Casalinghi", "31/12/2026", false, isOnline = false, type = "SCONTO", category = "Casalinghi", discountPercent = 20)
     )
 
     val promotions = mutableListOf(
-        Promotion(1, "Sconto Bevande", "Bevande", 10, "31/12/2024"),
-        Promotion(2, "Sconto Colazione", "Dolci", 5, "15/06/2024")
+        Promotion(1, "Sconto del 10% su Bevande", "Bevande", 10, "31/12/2026", false),
+        Promotion(2, "Sconto del 5% su Dolci", "Dolci", 5, "31/12/2026", false)
     )
 
     val jobOffers = mutableListOf(
@@ -61,9 +80,9 @@ object FakeRepository {
     )
 
     val applications = mutableListOf(
-        JobApplication("Marco Rossi", "Scaffalista", "20/05/2024", "Milano Bovisa"),
-        JobApplication("Anna Bianchi", "Cassiera", "19/05/2024", "Milano Central"),
-        JobApplication("Luca Verdi", "Magazziniere", "18/05/2024", "Milano Bovisa")
+        JobApplication(1, "Marco Rossi", "Scaffalista", "20/05/2024", "Milano Bovisa", jobOfferId = 2),
+        JobApplication(2, "Anna Bianchi", "Cassiera", "19/05/2024", "Milano Central", jobOfferId = 1),
+        JobApplication(3, "Luca Verdi", "Magazziniere", "18/05/2024", "Milano Bovisa")
     )
 
     val favorites = mutableListOf<FavoriteItem>()
@@ -93,7 +112,7 @@ object FakeRepository {
         val date = dateFormat.format(java.util.Date())
         val orderId = "ORD-${System.currentTimeMillis().toString().takeLast(6)}"
         
-        orders.add(0, Order(orderId, date, total, "In elaborazione", items.toList()))
+        orders.add(0, Order(orderId, date, total, "In elaborazione", items.toList(), address))
         
         // Aggiungiamo l'indirizzo se non esiste già
         if (addresses.none { it.fullAddress.equals(address, ignoreCase = true) }) {
