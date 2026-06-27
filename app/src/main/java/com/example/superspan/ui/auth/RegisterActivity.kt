@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.superspan.MainActivity
 import com.example.superspan.databinding.ActivityRegisterBinding
 
 class RegisterActivity : AppCompatActivity() {
@@ -28,7 +27,10 @@ class RegisterActivity : AppCompatActivity() {
                 Toast.makeText(this, "Riempi tutti i campi!", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(this, "Registrazione completata per $nome!", Toast.LENGTH_SHORT).show()
-                startActivity(Intent(this, MainActivity::class.java))
+                // Invece della Home, apriamo il Login come richiesto
+                val intent = Intent(this, LoginActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP // Riutilizza la LoginActivity esistente se presente
+                startActivity(intent)
                 finish()
             }
         }
