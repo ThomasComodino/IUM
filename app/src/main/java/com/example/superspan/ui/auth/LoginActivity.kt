@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.superspan.MainActivity
 import com.example.superspan.AdminActivity // Creeremo questa ora
+import com.example.superspan.data.FakeRepository
 import com.example.superspan.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {
@@ -49,19 +50,28 @@ class LoginActivity : AppCompatActivity() {
                 }
                 editor.apply()
 
-                // Pulizia errori prima del login
-                binding.tilEmail.error = null
-                binding.tilPassword.error = null
+                // 3. AUTENTICAZIONE REALE
+                val authenticatedUser = FakeRepository.authenticate(email, pass)
 
-                // 3. SEPARAZIONE RUOLI (Admin vs Cliente)
-                if (email == "admin" && pass == "admin") {
-                    Toast.makeText(this, "Accesso Amministratore", Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(this, AdminActivity::class.java))
+                if (authenticatedUser != null) {
+                    // Pulizia errori
+                    binding.tilEmail.error = null
+                    binding.tilPassword.error = null
+
+                    if (authenticatedUser.isAdmin) {
+                        Toast.makeText(this, "Accesso Amministratore", Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(this, AdminActivity::class.java))
+                    } else {
+                        Toast.makeText(this, "Benvenuto, ${authenticatedUser.name}", Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(this, MainActivity::class.java))
+                    }
+                    finish()
                 } else {
-                    Toast.makeText(this, "Benvenuto in SUperSpan", Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(this, MainActivity::class.java))
+                    // Feedback credenziali errate
+                    binding.tilEmail.error = "Credenziali non valide"
+                    binding.tilPassword.error = "Verifica email e password"
+                    Toast.makeText(this, "Email o Password errati!", Toast.LENGTH_SHORT).show()
                 }
-                finish()
             }
         }
 

@@ -1,30 +1,59 @@
 package com.example.superspan.data
 
+import com.example.superspan.R
+
 object FakeRepository {
 
-    val products = listOf(
-        Product(1, "Acqua Naturale 6x1.5L", "Bevande", "Cassa d'acqua naturale.", 2.50),
-        Product(2, "Biscotti Frollini 500g", "Dolci", "Ottimi per la colazione.", 3.20),
-        Product(3, "Pasta Spaghetti 500g", "Alimentari", "Grano duro 100% italiano.", 1.20),
-        Product(4, "Passata di Pomodoro", "Alimentari", "Pomodori italiani.", 1.50),
-        Product(5, "Set 3 Padelle Antiaderenti", "Casalinghi", "Padelle di alta qualità per la tua cucina.", 29.90)
+    // --- GESTIONE UTENTI ---
+    var currentUser: User? = null
+
+    val users = mutableListOf(
+        User("Admin", "admin", "admin", isAdmin = true),
+        User("Claudia", "claudia@example.com", "password123", 
+            addresses = mutableListOf(Address(1, "Casa", "Via Roma 10, Milano")),
+            points = 1250
+        )
     )
 
-    // Funzione per il prezzo dinamico (Richiesta per l'aggiornamento automatico)
+    fun registerUser(user: User): Boolean {
+        if (users.any { it.email == user.email }) return false
+        users.add(user)
+        return true
+    }
+
+    fun authenticate(email: String, pass: String): User? {
+        val user = users.find { it.email == email && it.password == pass }
+        currentUser = user
+        return user
+    }
+
+    // --- DATI PRODOTTI ---
+    val products = listOf(
+        Product(1, "Acqua Naturale 6x1.5L", "Bevande", "Cassa d'acqua naturale.", 2.50, imageUrl = R.drawable.acqua_6x1_5l),
+        Product(2, "Biscotti Frollini 500g", "Dolci", "Ottimi per la colazione.", 3.20, imageUrl = R.drawable.biscotti_frollini),
+        Product(3, "Pasta Spaghetti 500g", "Alimentari", "Grano duro 100% italiano.", 1.20, imageUrl = R.drawable.spaghetti_500g),
+        Product(4, "Passata di Pomodoro", "Alimentari", "Pomodori italiani.", 1.50, imageUrl = R.drawable.passata_di_pomodoro),
+        Product(5, "Set 3 Padelle Antiaderenti", "Casalinghi", "Padelle di alta qualità per la tua cucina.", 29.90, imageUrl = R.drawable.set_padelle),
+        Product(6, "Banane", "Frutta e Verdura", "Banane fresche di categoria extra.", 1.99, imageUrl = R.drawable.banane)
+    )
+
+    // --- LOGICA PREZZI E OFFERTE ---
     fun getFinalPrice(product: Product): Double {
         var price = product.price
         
-        // 1. Offerte Generali Attive (Promozioni)
+        // 1. Offerte Generali Attive (Promozioni Admin)
         promotions.filter { isPromotionValid(it) }.forEach { promo ->
             if (product.category == promo.category) {
                 price *= (1.0 - (promo.discountPercent.toDouble() / 100.0))
             }
         }
 
-        // 2. Applichiamo i coupon online attivati
-        adminCoupons.filter { it.isActive && it.isOnline && it.type == "SCONTO" }.forEach { coupon ->
-            if (activatedCouponIds.contains(coupon.id) && product.category == coupon.category) {
-                price *= (1.0 - (coupon.discountPercent?.toDouble() ?: 0.0) / 100.0)
+        // 2. Coupon Online attivati dall'utente corrente
+        currentUser?.let { user ->
+            adminCoupons.filter { it.isActive && it.isOnline && it.type == "SCONTO" }.forEach { coupon ->
+                if (user.activatedCouponIds.contains(coupon.id) && product.category == coupon.category) {
+                    price *= (1.0 - (coupon.discountPercent?.toDouble() ?: 0.0) / 100.0)
+                }
             }
         }
         
@@ -43,15 +72,21 @@ object FakeRepository {
         }
     }
 
-    val cart = mutableListOf<CartItem>()
-    val activatedCouponIds = mutableSetOf<Int>()
+    // --- ACCESSO AI DATI DELL'UTENTE CORRENTE ---
+    val cart: MutableList<CartItem> get() = currentUser?.cart ?: mutableListOf()
+    val orders: MutableList<Order> get() = currentUser?.orders ?: mutableListOf()
+    val addresses: MutableList<Address> get() = currentUser?.addresses ?: mutableListOf()
+    val favorites: MutableList<FavoriteItem> get() = currentUser?.favorites ?: mutableListOf()
+    val activatedCouponIds: MutableSet<Int> get() = currentUser?.activatedCouponIds ?: mutableSetOf()
 
     fun addToCart(product: Product) {
-        val existingItem = cart.find { it.product.id == product.id }
-        if (existingItem != null) {
-            existingItem.quantity++
-        } else {
-            cart.add(CartItem(product, 1))
+        currentUser?.let { user ->
+            val existingItem = user.cart.find { it.product.id == product.id }
+            if (existingItem != null) {
+                existingItem.quantity++
+            } else {
+                user.cart.add(CartItem(product, 1))
+            }
         }
     }
 
@@ -61,7 +96,38 @@ object FakeRepository {
         }
     }
 
-    // Elenco Coupon gestiti dall'admin
+    fun toggleFavorite(product: Product) {
+        currentUser?.let { user ->
+            val existing = user.favorites.find { it.product.id == product.id }
+            if (existing != null) {
+                user.favorites.remove(existing)
+            } else {
+                user.favorites.add(FavoriteItem(product, getFinalPrice(product)))
+            }
+        }
+    }
+
+    fun addOrder(items: List<CartItem>, total: Double, address: String, skipAddressSave: Boolean = false) {
+        currentUser?.let { user ->
+            val dateFormat = java.text.SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault())
+            val date = dateFormat.format(java.util.Date())
+            val orderId = "ORD-${System.currentTimeMillis().toString().takeLast(6)}"
+            
+            val newOrder = Order(orderId, date, total, "In elaborazione", items.toList(), address)
+            user.orders.add(0, newOrder)
+            
+            // Incremento punti (es. 1 punto ogni euro)
+            user.points += total.toInt()
+            
+            // Sincronizzazione indirizzo se nuovo (e non esplicitamente saltata)
+            if (!skipAddressSave && user.addresses.none { it.fullAddress.equals(address, ignoreCase = true) }) {
+                val newId = (user.addresses.maxOfOrNull { it.id } ?: 0) + 1
+                user.addresses.add(Address(newId, "Indirizzo $newId", address))
+            }
+        }
+    }
+
+    // --- DATI GESTIONALI (ADMIN) ---
     val adminCoupons = mutableListOf(
         Coupon(1, "Sconto del 15% su Alimentari", "01/01/2024", false, isOnline = true, type = "SCONTO", category = "Alimentari", discountPercent = 15),
         Coupon(2, "Sconto del 10% su Bevande", "31/12/2026", false, isOnline = true, type = "SCONTO", category = "Bevande", discountPercent = 10),
@@ -75,8 +141,8 @@ object FakeRepository {
     )
 
     val jobOffers = mutableListOf(
-        JobOffer(1, "Cassiera Part-Time", "Gestione cassa e clienti.", "Milano Central", "Determinato"),
-        JobOffer(2, "Scaffalista", "Caricamento scaffali e magazzino.", "Milano Bovisa", "Indeterminato")
+        JobOffer(1, "Cassiera Part-Time", "Gestione cassa e clienti.", "Sesto S.G.", "Part-Time"),
+        JobOffer(2, "Scaffalista", "Caricamento scaffali e magazzino.", "Sesto S.G.", "Indeterminato")
     )
 
     val applications = mutableListOf(
@@ -85,39 +151,12 @@ object FakeRepository {
         JobApplication(3, "Luca Verdi", "Magazziniere", "18/05/2024", "Milano Bovisa")
     )
 
-    val favorites = mutableListOf<FavoriteItem>()
-
-    fun toggleFavorite(product: Product) {
-        val existing = favorites.find { it.product.id == product.id }
-        if (existing != null) {
-            favorites.remove(existing)
-        } else {
-            // Salviamo il prodotto insieme al prezzo "congelato" in questo momento
-            favorites.add(FavoriteItem(product, getFinalPrice(product)))
-        }
-    }
-
-    val giftCoupon = GiftCoupon(
+    // Coupon Regalo (Mantenuto per compatibilità, ma ora legato all'utente)
+    val giftCoupon: GiftCoupon get() = GiftCoupon(
         id = 101,
         title = "Regalo di Benvenuto",
-        options = listOf(products[1], products[2], products[3]) // Biscotti, Pasta, Passata
+        options = listOf(products[1], products[2], products[3]),
+        isActivated = currentUser?.giftCouponActivated ?: false,
+        selectedProductId = currentUser?.giftSelectedProductId
     )
-
-    // Dati per Claudia (Profilo) - Inizialmente vuoti o con semi realistici
-    val orders = mutableListOf<Order>()
-    val addresses = mutableListOf<Address>()
-
-    fun addOrder(items: List<CartItem>, total: Double, address: String) {
-        val dateFormat = java.text.SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault())
-        val date = dateFormat.format(java.util.Date())
-        val orderId = "ORD-${System.currentTimeMillis().toString().takeLast(6)}"
-        
-        orders.add(0, Order(orderId, date, total, "In elaborazione", items.toList(), address))
-        
-        // Aggiungiamo l'indirizzo se non esiste già
-        if (addresses.none { it.fullAddress.equals(address, ignoreCase = true) }) {
-            val newId = (addresses.maxOfOrNull { it.id } ?: 0) + 1
-            addresses.add(Address(newId, "Indirizzo $newId", address))
-        }
-    }
 }

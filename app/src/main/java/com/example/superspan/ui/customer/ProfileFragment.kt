@@ -28,10 +28,11 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Carichiamo i punti
-        binding.tvPoints.text = "1.250 Punti"
+        // Carichiamo i dati dell'utente corrente
+        val user = FakeRepository.currentUser
+        binding.tvPoints.text = "${user?.points ?: 0} Punti"
 
-        // Setup della lista
+        // Setup della lista preferiti dell'utente
         val favoritesList = FakeRepository.favorites
         if (favoritesList.isEmpty()) {
             binding.rvFavorites.visibility = View.GONE

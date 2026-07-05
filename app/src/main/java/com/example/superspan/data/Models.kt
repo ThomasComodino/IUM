@@ -1,5 +1,21 @@
 package com.example.superspan.data
 
+// Modello per l'Utente
+data class User(
+    val name: String,
+    val email: String,
+    val password: String,
+    val isAdmin: Boolean = false,
+    val cart: MutableList<CartItem> = mutableListOf(),
+    val orders: MutableList<Order> = mutableListOf(),
+    val addresses: MutableList<Address> = mutableListOf(),
+    val activatedCouponIds: MutableSet<Int> = mutableSetOf(),
+    val favorites: MutableList<FavoriteItem> = mutableListOf(),
+    var points: Int = 0,
+    var giftCouponActivated: Boolean = false,
+    var giftSelectedProductId: Int? = null
+)
+
 // Modello per il singolo Prodotto
 data class Product(
     val id: Int,

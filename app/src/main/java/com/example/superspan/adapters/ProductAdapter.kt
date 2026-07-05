@@ -30,6 +30,9 @@ class ProductAdapter(
         with(holder.binding) {
             tvName.text = product.name
             
+            // Carichiamo l'immagine reale del prodotto
+            ivProduct.setImageResource(product.imageUrl)
+            
             // Chiediamo il prezzo finale aggiornato al repository
             val finalPrice = FakeRepository.getFinalPrice(product)
             tvPrice.text = "€ " + String.format("%.2f", finalPrice)

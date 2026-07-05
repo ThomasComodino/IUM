@@ -31,15 +31,16 @@ class CartAdapter(
             tvCartPrice.text = "€ " + String.format("%.2f", currentPrice)
 
             tvQuantity.text = item.quantity.toString()
+            tvReadOnlyQuantity.text = "Qtà: ${item.quantity}"
 
             if (isReadOnly) {
-                btnPlus.visibility = View.GONE
-                btnMinus.visibility = View.GONE
+                layoutQuantityControls.visibility = View.GONE
+                tvReadOnlyQuantity.visibility = View.VISIBLE
                 btnDelete.visibility = View.GONE
                 root.setOnClickListener(null)
             } else {
-                btnPlus.visibility = View.VISIBLE
-                btnMinus.visibility = View.VISIBLE
+                layoutQuantityControls.visibility = View.VISIBLE
+                tvReadOnlyQuantity.visibility = View.GONE
                 btnDelete.visibility = View.VISIBLE
 
                 btnPlus.setOnClickListener {

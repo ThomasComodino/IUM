@@ -21,8 +21,7 @@
             android:src="@android:drawable/ic_menu_gallery"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:tint="@color/green_super" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <!-- Nome del prodotto -->
         <TextView

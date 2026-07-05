@@ -8,7 +8,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.superspan.R
+import com.example.superspan.adapters.CartAdapter
 import com.example.superspan.data.FakeRepository
 import com.google.android.material.button.MaterialButton
 
@@ -26,13 +29,20 @@ class OrderSummaryFragment : Fragment() {
 
         val total = FakeRepository.getTotal()
         val address = arguments?.getString("deliveryAddress") ?: "N/D"
+        val store = arguments?.getString("selectedStore") ?: "SUperSpan Centro - Via Dante 1"
         
         view.findViewById<TextView>(R.id.tvSummaryTotal).text = "€ " + String.format("%.2f", total)
         view.findViewById<TextView>(R.id.tvSummaryAddress).text = address
+        view.findViewById<TextView>(R.id.tvSummaryStore).text = store
+
+        val rvItems = view.findViewById<RecyclerView>(R.id.rvSummaryItems)
+        rvItems.layoutManager = LinearLayoutManager(requireContext())
+        rvItems.adapter = CartAdapter(FakeRepository.cart.toList(), {}, {}, isReadOnly = true)
 
         view.findViewById<MaterialButton>(R.id.btnFinalConfirm).setOnClickListener {
             // Salviamo l'ordine nel repository prima di svuotare il carrello
-            FakeRepository.addOrder(FakeRepository.cart, total, address)
+            val isAlreadySaved = arguments?.getBoolean("isSavedAddress") ?: false
+            FakeRepository.addOrder(FakeRepository.cart, total, address, isAlreadySaved)
 
             // Svuota il carrello
             FakeRepository.cart.clear()

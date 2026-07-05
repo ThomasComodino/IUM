@@ -33,6 +33,7 @@ class ProductDetailFragment : Fragment() {
             binding.tvDetailName.text = p.name
             binding.tvDetailDesc.text = p.description
             binding.chipCategory.text = p.category.uppercase()
+            binding.ivDetailImage.setImageResource(p.imageUrl)
 
             // --- CALCOLO DINAMICO DEL PREZZO ---
             // Chiediamo al repository il prezzo finale (che dipende dai coupon attivi)

@@ -104,10 +104,11 @@ class CheckoutFragment : Fragment() {
                 binding.tilAddress.error = null
                 binding.tilCity.error = null
                 
-                // Passiamo al riepilogo con l'indirizzo completo
+                // Passiamo al riepilogo con l'indirizzo completo e il negozio scelto
                 val fullAddress = "$address, $city"
                 val bundle = Bundle().apply {
                     putString("deliveryAddress", fullAddress)
+                    putString("selectedStore", arguments?.getString("selectedStore"))
                 }
                 findNavController().navigate(R.id.action_checkoutFragment_to_orderSummaryFragment, bundle)
             }
@@ -116,6 +117,8 @@ class CheckoutFragment : Fragment() {
 
     private fun setupSavedAddresses() {
         val addresses = FakeRepository.addresses
+        val selectedStore = arguments?.getString("selectedStore")
+        
         if (addresses.isEmpty()) {
             binding.cgSavedAddresses.visibility = View.GONE
         } else {
@@ -127,15 +130,21 @@ class CheckoutFragment : Fragment() {
                 chip.setOnClickListener {
                     // Se è un indirizzo salvato, lo formattiamo con il nome tra parentesi
                     val formatted = "${addr.fullAddress} (${addr.name})"
-                    binding.etAddress.setText(addr.fullAddress)
-                    binding.etCity.setText("") // Puliamo la città se usiamo un salvato (presumiamo sia già nell'indirizzo)
+                    
+                    // Cerchiamo di separare via e città per i campi del form (se possibile)
+                    val parts = addr.fullAddress.split(", ")
+                    binding.etAddress.setText(parts.getOrNull(0) ?: addr.fullAddress)
+                    binding.etCity.setText(parts.getOrNull(1) ?: "")
                     
                     binding.webViewMap.evaluateJavascript("updateMap('${addr.fullAddress}')", null)
                     
-                    // Sovrascriviamo l'azione del bottone per questo caso specifico o passiamo i dati
+                    // Sovrascriviamo l'azione del bottone per questo caso specifico
+                    // Impediamo il salvataggio duplicato (passiamo un flag o gestiamo nel summary)
                     binding.btnConfirmOrder.setOnClickListener {
                         val bundle = Bundle().apply {
                             putString("deliveryAddress", formatted)
+                            putString("selectedStore", selectedStore)
+                            putBoolean("isSavedAddress", true) // Flag per evitare il salvataggio duplicato
                         }
                         findNavController().navigate(R.id.action_checkoutFragment_to_orderSummaryFragment, bundle)
                     }

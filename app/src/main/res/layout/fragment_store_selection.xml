@@ -39,7 +39,7 @@
             android:id="@+id/rbStoreCentro"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="SUperSpan Centro"
+            android:text="SUperSpan, Via Dante 1, Milano"
             android:textSize="18sp"
             android:padding="16dp"
             android:checked="true"/>
@@ -48,7 +48,7 @@
             android:id="@+id/rbStoreNord"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="SUperSpan Nord"
+            android:text="SUperSpan, Viale Monza 10, Milano"
             android:textSize="18sp"
             android:padding="16dp"/>
 
@@ -56,7 +56,7 @@
             android:id="@+id/rbStoreSud"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="SUperSpan Sud"
+            android:text="SUperSpan, Via dei Missaglia 45, Milano"
             android:textSize="18sp"
             android:padding="16dp"/>
 

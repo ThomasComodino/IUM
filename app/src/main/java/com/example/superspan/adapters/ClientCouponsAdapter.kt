@@ -127,9 +127,14 @@ class ClientCouponsAdapter(
                             .setMessage("Confermi la scelta?")
                             .setNegativeButton("Annulla", null)
                             .setPositiveButton("Conferma") { _, _ ->
-                                gift.isActivated = true
-                                setActivated(gift.options.find { it.id == gift.selectedProductId }?.name ?: "")
-                                onActivate()
+                                // Salviamo lo stato nell'utente corrente
+                                FakeRepository.currentUser?.let { user ->
+                                    user.giftCouponActivated = true
+                                    user.giftSelectedProductId = gift.selectedProductId
+                                    
+                                    setActivated(gift.options.find { it.id == user.giftSelectedProductId }?.name ?: "")
+                                    onActivate()
+                                }
                             }.show()
                     }
                 }

@@ -23,7 +23,8 @@
             android:textColor="@color/black_text"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btnDelete"/>
 
         <TextView
             android:id="@+id/tvCartPrice"
@@ -34,50 +35,64 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvCartName"/>
 
-        <!-- Pulsante Meno -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnMinus"
-            style="@style/Widget.Material3.Button.OutlinedButton"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:text="-"
-            android:textSize="18sp"
-            android:textColor="@color/black_text"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
-            android:padding="0dp"
+        <!-- Controlli Quantità (Visibili solo in carrello) -->
+        <LinearLayout
+            android:id="@+id/layoutQuantityControls"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
             android:layout_marginTop="12dp"
             app:layout_constraintTop_toBottomOf="@id/tvCartPrice"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent">
 
-        <!-- Quantità (Larghezza fissa per creare lo spazio centrale) -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnMinus"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:text="-"
+                android:textSize="16sp"
+                android:textColor="@color/black_text"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:padding="0dp"/>
+
+            <TextView
+                android:id="@+id/tvQuantity"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:text="1"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/black_text"
+                android:gravity="center"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnPlus"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:text="+"
+                android:textSize="16sp"
+                android:textColor="@color/black_text"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:padding="0dp"/>
+        </LinearLayout>
+
+        <!-- Testo Quantità (Visibile solo in riepilogo sola lettura) -->
         <TextView
-            android:id="@+id/tvQuantity"
-            android:layout_width="60dp"
+            android:id="@+id/tvReadOnlyQuantity"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="1"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@color/black_text"
-            android:gravity="center"
-            app:layout_constraintTop_toTopOf="@id/btnMinus"
-            app:layout_constraintBottom_toBottomOf="@id/btnMinus"
-            app:layout_constraintStart_toEndOf="@id/btnMinus"/>
-
-        <!-- Pulsante Più -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnPlus"
-            style="@style/Widget.Material3.Button.OutlinedButton"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:text="+"
-            android:textSize="18sp"
-            android:textColor="@color/black_text"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
-            android:padding="0dp"
-            app:layout_constraintTop_toTopOf="@id/btnMinus"
-            app:layout_constraintStart_toEndOf="@id/tvQuantity"/>
+            android:text="Qtà: 1"
+            android:textSize="14sp"
+            android:textColor="@color/gray_text"
+            android:visibility="gone"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/tvCartPrice"
+            app:layout_constraintStart_toStartOf="parent"/>
 
         <!-- Pulsante Cestino -->
         <ImageButton
@@ -87,7 +102,7 @@
             android:src="@drawable/ic_delete"
             android:background="?attr/selectableItemBackgroundBorderless"
             app:tint="@color/red_error"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

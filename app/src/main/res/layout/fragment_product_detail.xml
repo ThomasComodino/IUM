@@ -23,7 +23,6 @@
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:src="@android:drawable/ic_menu_gallery"
-            app:tint="@color/green_super"
             android:layout_marginTop="16dp"/>
 
         <!-- Categoria Evidenziata -->

@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.superspan.data.FakeRepository
+import com.example.superspan.data.User
 import com.example.superspan.databinding.ActivityRegisterBinding
 
 class RegisterActivity : AppCompatActivity() {
@@ -26,12 +28,18 @@ class RegisterActivity : AppCompatActivity() {
                 if (pass.isBlank()) binding.tilRegPass.error = "Manca la password" else binding.tilRegPass.error = null
                 Toast.makeText(this, "Riempi tutti i campi!", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this, "Registrazione completata per $nome!", Toast.LENGTH_SHORT).show()
-                // Invece della Home, apriamo il Login come richiesto
-                val intent = Intent(this, LoginActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP // Riutilizza la LoginActivity esistente se presente
-                startActivity(intent)
-                finish()
+                val success = FakeRepository.registerUser(User(nome, email, pass))
+                if (success) {
+                    Toast.makeText(this, "Registrazione completata per $nome!", Toast.LENGTH_SHORT).show()
+                    // Invece della Home, apriamo il Login come richiesto
+                    val intent = Intent(this, LoginActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP // Riutilizza la LoginActivity esistente se presente
+                    startActivity(intent)
+                    finish()
+                } else {
+                    binding.tilRegEmail.error = "Email già registrata"
+                    Toast.makeText(this, "Errore: Email già esistente!", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
