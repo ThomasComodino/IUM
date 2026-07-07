@@ -44,21 +44,27 @@ class AdminCouponsAdapter(
     }
 
     private fun getCouponState(coupon: Coupon): Pair<String, String> {
-        if (!coupon.isActive) return "DISATTIVATO" to "#D32F2F"
-        
-        return try {
+        try {
             val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
             val expiry = sdf.parse(coupon.expiryDate)
-            val now = Date()
+            val now = sdf.parse(sdf.format(Date()))
             
-            when {
+            // 1. La scadenza ha la priorità assoluta
+            if (expiry != null && expiry.before(now)) {
+                return "SCADUTO" to "#D32F2F"
+            }
+            
+            // 2. Se non è scaduto, controlliamo lo stato manuale
+            if (!coupon.isActive) return "DISATTIVATO" to "#D32F2F"
+
+            // 3. Se è attivo, verifichiamo se è in scadenza (prossimi 7 giorni)
+            return when {
                 expiry == null -> "ATTIVO" to "#2E7D32"
-                expiry.before(now) -> "SCADUTO" to "#D32F2F"
-                (expiry.time - now.time) < 7 * 24 * 60 * 60 * 1000 -> "IN SCADENZA" to "#FF9800"
+                (expiry.time - Date().time) < 7 * 24 * 60 * 60 * 1000 -> "IN SCADENZA" to "#FF9800"
                 else -> "ATTIVO" to "#2E7D32"
             }
         } catch (e: Exception) {
-            "ATTIVO" to "#2E7D32"
+            return if (coupon.isActive) "ATTIVO" to "#2E7D32" else "DISATTIVATO" to "#D32F2F"
         }
     }
 

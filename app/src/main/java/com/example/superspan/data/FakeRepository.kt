@@ -127,6 +127,12 @@ object FakeRepository {
         }
     }
 
+    // --- FUNZIONI PER ADMIN (STATISTICHE GLOBALI) ---
+    fun getTotalOrdersCount(): Int = users.sumOf { it.orders.size }
+    fun getTotalApplicationsCount(): Int = applications.size
+    fun getActiveCouponsCount(): Int = adminCoupons.count { it.isActive }
+    fun getActivePromosCount(): Int = promotions.count { it.isActive }
+
     // --- DATI GESTIONALI (ADMIN) ---
     val adminCoupons = mutableListOf(
         Coupon(1, "Sconto del 15% su Alimentari", "01/01/2024", false, isOnline = true, type = "SCONTO", category = "Alimentari", discountPercent = 15),

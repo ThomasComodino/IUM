@@ -28,6 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:hint="Email"
+        app:errorIconDrawable="@null"
         app:layout_constraintTop_toBottomOf="@id/tvTitle">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -45,6 +46,7 @@
         android:layout_marginTop="16dp"
         android:hint="Password"
         app:endIconMode="password_toggle"
+        app:errorIconDrawable="@null"
         app:layout_constraintTop_toBottomOf="@id/tilEmail">
 
         <com.google.android.material.textfield.TextInputEditText

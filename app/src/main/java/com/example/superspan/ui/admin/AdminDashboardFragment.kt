@@ -24,11 +24,11 @@ class AdminDashboardFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Aggiorna i dati reali del repository nelle card
-        binding.tvOrdersCount.text = FakeRepository.orders.size.toString()
-        binding.tvCouponsCount.text = FakeRepository.adminCoupons.count { it.isActive }.toString()
-        binding.tvPromosCount.text = FakeRepository.promotions.count { it.isActive }.toString()
-        binding.tvJobsCount.text = FakeRepository.applications.size.toString()
+        // Aggiorna i dati reali del repository nelle card (Statistiche Globali per Admin)
+        binding.tvOrdersCount.text = FakeRepository.getTotalOrdersCount().toString()
+        binding.tvCouponsCount.text = FakeRepository.getActiveCouponsCount().toString()
+        binding.tvPromosCount.text = FakeRepository.getActivePromosCount().toString()
+        binding.tvJobsCount.text = FakeRepository.getTotalApplicationsCount().toString()
 
         binding.btnAdminLogout.setOnClickListener {
             MaterialAlertDialogBuilder(requireContext())
@@ -46,6 +46,9 @@ class AdminDashboardFragment : Fragment() {
                     if (!email.isNullOrBlank()) {
                         pref.edit().putString("email", email).putString("pass", pass).apply()
                     }
+
+                    // Resettiamo l'utente nel repository
+                    FakeRepository.currentUser = null
 
                     val intent = Intent(requireContext(), com.example.superspan.ui.auth.LoginActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

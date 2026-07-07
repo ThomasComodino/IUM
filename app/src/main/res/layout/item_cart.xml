@@ -86,13 +86,14 @@
             android:id="@+id/tvReadOnlyQuantity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Qtà: 1"
-            android:textSize="14sp"
+            android:text="x1"
+            android:textSize="16sp"
             android:textColor="@color/gray_text"
             android:visibility="gone"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@id/tvCartPrice"
-            app:layout_constraintStart_toStartOf="parent"/>
+            android:layout_marginStart="12dp"
+            app:layout_constraintBottom_toBottomOf="@id/tvCartPrice"
+            app:layout_constraintStart_toEndOf="@id/tvCartPrice"
+            app:layout_constraintTop_toTopOf="@id/tvCartPrice"/>
 
         <!-- Pulsante Cestino -->
         <ImageButton

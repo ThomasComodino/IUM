@@ -27,20 +27,41 @@ class AdminPromotionsAdapter(
             tvPromoDetails.text = "Categoria: ${promo.category} | Sconto: ${promo.discountPercent}%"
             tvPromoValidity.text = "Valida fino al: ${promo.validUntil}"
             
-            if (promo.isActive) {
-                tvPromoStatus.text = "STATO: ATTIVA"
-                tvPromoStatus.setTextColor(root.context.getColor(R.color.green_super))
-                btnTogglePromo.text = "DISATTIVA"
-                btnTogglePromo.setBackgroundColor(root.context.getColor(R.color.red_error))
-            } else {
-                tvPromoStatus.text = "STATO: DISATTIVATA"
-                tvPromoStatus.setTextColor(root.context.getColor(R.color.red_error))
-                btnTogglePromo.text = "ATTIVA"
-                btnTogglePromo.setBackgroundColor(root.context.getColor(R.color.green_super))
+            // Logica stato con priorità alla scadenza
+            val isExpired = isPromoExpired(promo)
+            
+            when {
+                isExpired -> {
+                    tvPromoStatus.text = "STATO: SCADUTA"
+                    tvPromoStatus.setTextColor(root.context.getColor(R.color.red_error))
+                }
+                promo.isActive -> {
+                    tvPromoStatus.text = "STATO: ATTIVA"
+                    tvPromoStatus.setTextColor(root.context.getColor(R.color.green_super))
+                }
+                else -> {
+                    tvPromoStatus.text = "STATO: DISATTIVATA"
+                    tvPromoStatus.setTextColor(root.context.getColor(R.color.red_error))
+                }
             }
+
+            btnTogglePromo.text = if (promo.isActive) "DISATTIVA" else "ATTIVA"
+            val toggleColor = if (promo.isActive) R.color.red_error else R.color.green_super
+            btnTogglePromo.setBackgroundColor(root.context.getColor(toggleColor))
 
             btnTogglePromo.setOnClickListener { onToggleClick(promo) }
             btnDeletePromo.setOnClickListener { onDeleteClick(promo) }
+        }
+    }
+
+    private fun isPromoExpired(promo: Promotion): Boolean {
+        return try {
+            val sdf = java.text.SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault())
+            val expiry = sdf.parse(promo.validUntil)
+            val now = sdf.parse(sdf.format(java.util.Date()))
+            expiry != null && expiry.before(now)
+        } catch (e: Exception) {
+            false
         }
     }
 

@@ -23,9 +23,9 @@ class RegisterActivity : AppCompatActivity() {
 
             // Validazione: non permette di andare avanti se i campi sono vuoti
             if (nome.isBlank() || email.isBlank() || pass.isBlank()) {
-                if (nome.isBlank()) binding.tilRegNome.error = "Manca il nome" else binding.tilRegNome.error = null
-                if (email.isBlank()) binding.tilRegEmail.error = "Manca l'email" else binding.tilRegEmail.error = null
-                if (pass.isBlank()) binding.tilRegPass.error = "Manca la password" else binding.tilRegPass.error = null
+                if (nome.isBlank()) binding.tilRegNome.error = "Campo obbligatorio" else binding.tilRegNome.error = null
+                if (email.isBlank()) binding.tilRegEmail.error = "Campo obbligatorio" else binding.tilRegEmail.error = null
+                if (pass.isBlank()) binding.tilRegPass.error = "Campo obbligatorio" else binding.tilRegPass.error = null
                 Toast.makeText(this, "Riempi tutti i campi!", Toast.LENGTH_SHORT).show()
             } else {
                 val success = FakeRepository.registerUser(User(nome, email, pass))

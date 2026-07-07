@@ -72,6 +72,9 @@ class ProfileFragment : Fragment() {
             }
             editor.apply()
 
+            // Resettiamo l'utente nel repository
+            FakeRepository.currentUser = null
+
             val intent = Intent(requireContext(), com.example.superspan.ui.auth.LoginActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
