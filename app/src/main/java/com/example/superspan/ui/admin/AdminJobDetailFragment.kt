@@ -1,8 +1,10 @@
 package com.example.superspan.ui.admin
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import com.example.superspan.R
 import com.example.superspan.data.FakeRepository
@@ -30,11 +32,32 @@ class AdminJobDetailFragment : Fragment(R.layout.fragment_admin_job_detail) {
             }
 
             binding.btnViewCV.setOnClickListener {
-                Toast.makeText(requireContext(), "Apertura CV di ${c.candidateName}...", Toast.LENGTH_SHORT).show()
+                // Ritorno alla prima versione: Apertura tramite URL remoto
+                val pdfUrl = "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.setDataAndType(pdfUrl.toUri(), "application/pdf")
+                intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
+                
+                try {
+                    startActivity(intent)
+                } catch (e: Exception) {
+                    // Fallback browser se non c'è un lettore PDF dedicato
+                    val browserIntent = Intent(Intent.ACTION_VIEW, pdfUrl.toUri())
+                    startActivity(browserIntent)
+                }
             }
 
             binding.btnViewVideo.setOnClickListener {
-                Toast.makeText(requireContext(), "Riproduzione Video Presentazione...", Toast.LENGTH_SHORT).show()
+                val videoUrl = "https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4"
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.setDataAndType(videoUrl.toUri(), "video/mp4")
+                
+                try {
+                    startActivity(intent)
+                } catch (e: Exception) {
+                    val browserIntent = Intent(Intent.ACTION_VIEW, videoUrl.toUri())
+                    startActivity(browserIntent)
+                }
             }
 
             binding.btnForwardHR.setOnClickListener {
